@@ -1,4 +1,4 @@
-import Torch
+import torch
 from torch.utils.data import Dataset
 # read in pre porcessed data for pytorch Model
 
