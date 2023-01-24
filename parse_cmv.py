@@ -38,3 +38,5 @@ def parse_cmv_file(filename):
                 sentences.append((text, "<claim" in tags or "</claim" in tags))
     return sentences
 
+
+
