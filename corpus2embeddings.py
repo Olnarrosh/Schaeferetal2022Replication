@@ -4,14 +4,12 @@ from torch import tensor, cuda
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 model = BertModel.from_pretrained("bert-base-uncased")
 
-def convert_corpus(corpus: list[(list[str], bool)]) -> list[(list[float], bool)]:
-    sentences = []
-    for sentence, is_claim in corpus:
-        tokenized = tokenizer(sentence)
-        sentences.append((tokenized["input_ids"], is_claim))
+# tokenize all sentences in the corpus, then extract and pool embeddings
+def convert_corpus(corpus: list[(str, bool)]) -> list[(str, list[float], bool)]:
     sentence_embeddings = []
-    for sentence, is_claim in sentences:
-        word_embeddings = model(tensor([sentence]))["last_hidden_state"][0]
-        embeddings_sum = [sum(word_embeddings[i][j].item() for i in range(len(sentence))) for j in range(word_embeddings.size()[1])]
-        sentence_embeddings.append(([e / len(sentence) for e in embeddings_sum], is_claim))
+    for sentence, is_claim in corpus[:3]:
+        tokens = tokenizer(sentence)["input_ids"]
+        word_embeddings = model(tensor([tokens]))["last_hidden_state"][0]
+        embeddings_sum = [sum(word_embeddings[i][j].item() for i in range(len(tokens))) for j in range(word_embeddings.size()[1])]
+        sentence_embeddings.append((sentence, [e / len(tokens) for e in embeddings_sum], is_claim))
     return sentence_embeddings
