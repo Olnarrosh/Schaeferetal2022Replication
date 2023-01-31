@@ -28,7 +28,7 @@ class CustomEmbeddingDataset(Dataset):
     def __getitem__(self, idx):
         # assume form of input data: [(string, embedding_vector, label), ...]
         # !! -> current form of input data (based on corpus2embeddings -> [(embedding_vector, label)])
-        emb = self.emb_list[idx][1]
+        emb = torch.tensor(self.emb_list[idx][1])
         label = self.emb_list[idx][2]
         return emb, label
 

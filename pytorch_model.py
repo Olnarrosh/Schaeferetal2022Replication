@@ -43,7 +43,6 @@ def train(dataloader, model, loss_fn, optimizer, device):
     size = len(dataloader.dataset)
     model.train()
     for batch, (X, y) in enumerate(dataloader):
-        print(f" batch : {batch}")
         print(f"X: {X}")
         print(f"y: {y}")
         X, y = X.to(device), y.to(device)
@@ -85,8 +84,8 @@ def main():
     test_dataset = CustomEmbeddingDataset(data_test)
 
     # use DataLoaders to read in CustomDataset objects
-    train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-    test_dataloader = DataLoader(test_dataset, batch_size=64, shuffle=True)
+    train_dataloader = DataLoader(train_dataset, batch_size=1, shuffle=True)
+    test_dataloader = DataLoader(test_dataset, batch_size=1, shuffle=True)
 
     # define Device that is used to compute
     device = "cuda" if torch.cuda.is_available() else "cpu"
