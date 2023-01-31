@@ -1,5 +1,6 @@
 import torch
 from torch.utils.data import Dataset
+import numpy as np
 
 # read in pre porcessed data for pytorch Model
 
@@ -28,7 +29,7 @@ class CustomEmbeddingDataset(Dataset):
     def __getitem__(self, idx):
         # assume form of input data: [(string, embedding_vector, label), ...]
         # !! -> current form of input data (based on corpus2embeddings -> [(embedding_vector, label)])
-        emb = torch.tensor(self.emb_list[idx][1])
+        emb = np.array(self.emb_list[idx][1])
         label = self.emb_list[idx][2]
         return emb, label
 
