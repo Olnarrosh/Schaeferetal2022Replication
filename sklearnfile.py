@@ -115,12 +115,13 @@ if __name__ == "__main__":
     print("trainingdone")
     print(type(traindone))
     """
-    testdatei = [("bla", [1, 2, 32523, 423], 0), ("bla", [1235, 223562, 32234523, 42233], 1), ("blsdfa", [84351, 2, 325423, 3], 1), ("blasfa", [1, 2, 32523, 423], 0)]
+    testdatei = [("bla", [1.0, 2.0, 32523.0, 423.0], 0), ("bla", [1235.0, 223562.0, 32234523.0, 42233.0], 1), ("blsdfa", [84351.0, 2.0, 325423.0, 3.0], 1), ("blasfa", [1.0, 2.0, 32523.0, 423.0], 0)]
     testmatrix = create_matrix(testdatei)
     testvec = create_decision_vec(testdatei)
-    trainedobj = train_rf(testmatrix, testvec)
+    trainedobj = train_lr(testmatrix, testvec)
     print("training done")
-    res = predict_rf(trainedobj, [[124, 2412, 3, 9], [0, 0, 1, 24], [234, 124, 523, 632154], [1, 2, 32523, 423]])
+    print(type(trainedobj))
+    res = predict_lr(trainedobj, [[124.0, 2412.0, 3.0, 9.0], [0.0, 0.0, 1.0, 24.0], [234.0, 124.0, 523.0, 632154.0], [1.0, 2.0, 32523.0, 423.0]])
     print(res)
     print(computefscore([1, 0, 1, 0], res))
 
