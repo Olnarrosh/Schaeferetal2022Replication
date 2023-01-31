@@ -46,6 +46,8 @@ def train(dataloader, model, loss_fn, optimizer, device):
         print(f"X: {X}")
         print(f"y: {y}")
         X, y = X.to(device), y.to(device)
+        print(f"X: {X}")
+        print(f"y: {y}")
 
         # Compute prediction error
         pred = model(X)
