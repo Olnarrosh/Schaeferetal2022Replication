@@ -6,8 +6,9 @@ from sklearn.metrics import recall_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import f1_score
 import numpy as np
-import corpus2embeddings
+import preprocess
 import parse_cmv
+import pickle
 
 
 
@@ -98,15 +99,18 @@ def computefscore(true, pred):
     return f1_score(true, pred)
 
 
+#TODO ACCURACY
+
+
 
 
 
 if __name__ == "__main__":
-
+    """
     loadedcorpus = parse_cmv.parse_cmv_corpus()
     print("loaded corpus")
-    tuplelist = corpus2embeddings.convert_corpus(loadedcorpus)
-    print(tuplelist)
+    tuplelist = preprocess.convert_corpus(loadedcorpus)
+    print(len(tuplelist))
     print("created tuplelist")
     trainmatrix = create_matrix(tuplelist)
     print("testmatrix done")
@@ -114,6 +118,9 @@ if __name__ == "__main__":
     print("testvec done")
     traindone = train_svm(trainmatrix, trainvec)
     print("trainingdone")
+    filename = "testfile.sav"
+    pickle.dump(traindone, open(filename, "wb"))
+    print(pickle.load(open(filename)))
     #print(type(traindone))
     #predictone = tuplelist[0][1]
     #print(predict_svm(traindone, [predictone]))
@@ -122,9 +129,12 @@ if __name__ == "__main__":
     testmatrix = create_matrix(testdatei)
     testvec = create_decision_vec(testdatei)
     trainedobj = train_lr(testmatrix, testvec)
+    filename = "testfile.sav"
     print("training done")
-    print(type(trainedobj))
-    res = predict_lr(trainedobj, [[124.0, 2412.0, 3.0, 9.0], [0.0, 0.0, 1.0, 24.0], [234.0, 124.0, 523.0, 632154.0], [1.0, 2.0, 32523.0, 423.0]])
+    pickle.dump(trainedobj, open(filename, "wb"))
+    entpickled = pickle.load(open("testfile.sav", "rb"))
+    #print(type(trainedobj))
+    res = predict_lr(entpickled, [[124.0, 2412.0, 3.0, 9.0], [0.0, 0.0, 1.0, 24.0], [234.0, 124.0, 523.0, 632154.0], [1.0, 2.0, 32523.0, 423.0]])
     print(res)
-    print(computefscore([1, 0, 1, 0], res))
-    """
+    #print(computefscore([1, 0, 1, 0], res))
+
