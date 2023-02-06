@@ -10,12 +10,7 @@ def csv_Reader(filename: str):
     tuples_list = []
     file = pd.read_csv(filename)
     for i in range(len(file)):
-        if file.loc[i, 'Component'] == 'Claim':
-            tuples = (file.loc[i, 'Speech'], bool(1),)
-        else:
-            tuples = (file.loc[i, 'Speech'], bool(0))
-
-        tuples_list.append(tuples)
+        tuples_list.append((file.loc[i, 'Speech'], file.loc[i, 'MainTag'] in ('Claim', 'Mixed')))
 
     return tuples_list
 
