@@ -124,7 +124,7 @@ if __name__ == "__main__":
     #print(type(traindone))
     #predictone = tuplelist[0][1]
     #print(predict_svm(traindone, [predictone]))
-    """
+    
     testdatei = [("bla", [1.0, 2.0, 32523.0, 423.0], 0), ("bla", [1235.0, 223562.0, 32234523.0, 42233.0], 1), ("blsdfa", [84351.0, 2.0, 325423.0, 3.0], 1), ("blasfa", [1.0, 2.0, 32523.0, 423.0], 0)]
     testmatrix = create_matrix(testdatei)
     testvec = create_decision_vec(testdatei)
@@ -137,4 +137,6 @@ if __name__ == "__main__":
     res = predict_lr(entpickled, [[124.0, 2412.0, 3.0, 9.0], [0.0, 0.0, 1.0, 24.0], [234.0, 124.0, 523.0, 632154.0], [1.0, 2.0, 32523.0, 423.0]])
     print(res)
     #print(computefscore([1, 0, 1, 0], res))
+    """
+
 

@@ -22,7 +22,7 @@ def get_cmv_ready():
         pickle.dump(validate_cmv, val_cmv_file)
 
 
-
+# ATTENTION: following four methods can't load corpus yet! (still copy pasted from cmv)
 def get_usdeb_ready():
     loadedcorpus = parse_cmv.parse_cmv_corpus()
     tuplelist = corpus2embeddings.convert_corpus(loadedcorpus)
@@ -75,6 +75,77 @@ def get_essay_ready():
         pickle.dump(train_essay, train_essay_file)
     with open("val_essay_file.pkl", "wb") as val_essay_file:
         pickle.dump(validate_essay, val_essay_file)
+
+
+# Now the merged lists for leave-one-out-approach
+# IMPORTANT: run 5 methods for preprocessing first! (get_"corpus"_ready()
+def get_without_cmv_ready():
+    with open("train_usdeb_file.pkl", "rb") as g:
+        usdeb = pickle.load(g)
+    with open("train_micro_file.pkl", "rb") as h:
+        micro = pickle.load(h)
+    with open("train_mardy_file.pkl", "rb") as i:
+        mardy = pickle.load(i)
+    with open("train_essay_file.pkl", "rb") as i:
+        essay = pickle.load(f)
+    merged_without_cmv = usdeb + micro + mardy + essay
+    with open("leave_cmv_out.pkl", "wb") as leave_cmv_out:
+        pickle.dump(merged_without_cmv, leave_cmv_out)
+
+def get_without_usdeb_ready():
+    with open("train_cmv_file.pkl", "rb") as f:
+        cmv = pickle.load(f)
+    with open("train_micro_file.pkl", "rb") as h:
+        micro = pickle.load(h)
+    with open("train_mardy_file.pkl", "rb") as i:
+        mardy = pickle.load(i)
+    with open("train_essay_file.pkl", "rb") as i:
+        essay = pickle.load(f)
+    merged_without_usdeb = cmv + micro + mardy + essay
+    with open("leave_usdeb_out.pkl", "wb") as leave_usdeb_out:
+        pickle.dump(merged_without_usdeb, leave_usdeb_out)
+
+def get_without_micro_ready():
+    with open("train_cmv_file.pkl", "rb") as f:
+        cmv = pickle.load(f)
+    with open("train_usdeb_file.pkl", "rb") as g:
+        usdeb = pickle.load(g)
+    with open("train_mardy_file.pkl", "rb") as i:
+        mardy = pickle.load(i)
+    with open("train_essay_file.pkl", "rb") as i:
+        essay = pickle.load(f)
+    merged_without_micro = cmv + usdeb + mardy + essay
+    with open("leave_micro_out.pkl", "wb") as leave_micro_out:
+        pickle.dump(merged_without_micro, leave_micro_out)
+
+def get_without_mardy_ready():
+    with open("train_cmv_file.pkl", "rb") as f:
+        cmv = pickle.load(f)
+    with open("train_usdeb_file.pkl", "rb") as g:
+        usdeb = pickle.load(g)
+    with open("train_micro_file.pkl", "rb") as h:
+        micro = pickle.load(h)
+    with open("train_essay_file.pkl", "rb") as i:
+        essay = pickle.load(f)
+    merged_without_mardy = cmv + usdeb + micro + essay
+    with open("leave_mardy_out.pkl", "wb") as leave_mardy_out:
+        pickle.dump(merged_without_mardy, leave_mardy_out)
+
+
+def get_without_essay_ready():
+    with open("train_cmv_file.pkl", "rb") as f:
+        cmv = pickle.load(f)
+    with open("train_usdeb_file.pkl", "rb") as g:
+        usdeb = pickle.load(g)
+    with open("train_micro_file.pkl", "rb") as h:
+        micro = pickle.load(h)
+    with open("train_mardy_file.pkl", "rb") as i:
+        mardy = pickle.load(i)
+    merged_without_essay = cmv + usdeb + micro + mardy
+    with open("leave_essay_out.pkl", "wb") as leave_essay_out:
+        pickle.dump(merged_without_essay, leave_essay_out)
+
+
 
 if __name__ == "__main__":
     get_cmv_ready()
