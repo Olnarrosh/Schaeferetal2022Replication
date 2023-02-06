@@ -82,9 +82,10 @@ def test(dataloader, model, loss_fn, device):
             preds = torch.argmax(pred.data, 1)
             test_loss += loss_fn(pred, target_y).item()
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
-            f_score = f1_score(y.data, preds)
+            
     test_loss /= num_batches
     correct /= size
+    f_score = f1_score(y.data, preds)
     print(
         f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \nF1-Score: {f_score} \n"
     )
