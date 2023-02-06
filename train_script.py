@@ -10,6 +10,7 @@ import pickle
 # 20 trainobjects
 
 def train_model(corpus: str, model):
+    #add matrix and vcotr
     #switch case for 4 models
     match model:
         case "PyTorch":
@@ -49,9 +50,43 @@ def train_model(corpus: str, model):
 
 
         case "LogisticRegression":
+            # open pickle file with data
+            with open(f"train_{corpus}_file.pkl", "rb") as file:
+                train_list = pickle.load(file)
+            # create matrix and vector from corpusdata to put into train method
+            lr_matrix = sklearnfile.create_matrix(train_list)
+            lr_vec = sklearnfile.create_decision_vec(train_list)
+            # train model
+            trained_lr = sklearnfile.train_lr(lr_matrix, lr_vec)
+            # save trained model as pickle
+            filename = "lr_model.sav"
+            pickle.dump(trained_lr, open(filename, "wb"))
+
         case "RandomForest":
+            # open pickle file with data
+            with open(f"train_{corpus}_file.pkl", "rb") as file:
+                train_list = pickle.load(file)
+            # create matrix and vector from corpusdata to put into train method
+            rf_matrix = sklearnfile.create_matrix(train_list)
+            rf_vec = sklearnfile.create_decision_vec(train_list)
+            # train model
+            trained_rf = sklearnfile.train_rf(rf_matrix, rf_vec)
+            # save trained model as pickle
+            filename = "rf_model.sav"
+            pickle.dump(trained_rf, open(filename, "wb"))
+
         case "SVM":
-    return #fertig trainiertes Modell als pickle
+            # open pickle file with data
+            with open(f"train_{corpus}_file.pkl", "rb") as file:
+                train_list = pickle.load(file)
+            # create matrix and vector from corpusdata to put into train method
+            svm_matrix = sklearnfile.create_matrix(train_list)
+            svm_vec = sklearnfile.create_decision_vec(train_list)
+            # train model
+            trained_svm = sklearnfile.train_svm(svm_matrix, svm_vec)
+            # save trained model as pickle
+            filename = "svm_model.sav"
+            pickle.dump(trained_svm, open(filename, "wb"))
 
 
 if __name__ == "__main__":
