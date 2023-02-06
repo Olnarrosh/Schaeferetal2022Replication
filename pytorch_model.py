@@ -6,15 +6,15 @@ from torch import nn
 # dummy-Datensatz for testing purposes
 
 data_train = [
-    ["Das ist ein Test Satz", [1, 2, 0, 4, 5, 6, 7, 8, 9], 1],
-    ["Dieses Model wird super", [0, 0, 1, 0, 0, 0, 0, 0, 0], 0],
-    ["Ich brauche noch einen dritten Satz", [40, 10, 0, 41, 34, 89, 356, 8, 154], 1],
+	["Das ist ein Test Satz", [1.0, 2.0, 0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], 1.0],
+    ["Dieses Model wird super", [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 0.0],
+    ["Ich brauche noch einen dritten Satz", [40.0, 10.0, 0.0, 41.0, 34.0, 89.0, 356.0, 8.0, 154.0], 1.0],
 ]
 
 data_test = [
-    ["Wow, noch mehr Sätze", [4, 5, 0, 7, 8, 9, 10, 11, 12], 1],
-    ["Test-Satz nummer 2", [0, 15, 1, 1, 3, 4, 3, 8, 0], 0],
-    ["Und Drittens", [1, 6, 0, 4, 5, 6, 7, 8, 9], 1],
+    ["Wow, noch mehr Sätze", [4.0, 5.0, 0.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0], 1.0],
+    ["Test-Satz nummer 2", [0.0, 15.0, 1.0, 1.0, 3.0, 4.0, 3.0, 8.0, 0.0], 0.0],
+    ["Und Drittens", [1.0, 6.0, 0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], 1.0],
 ]
 
 
@@ -35,6 +35,7 @@ class NeuralNetwork(nn.Module):
         )
 
     def forward(self, x):
+        # breakpoint()
         logits = self.linear_relu_stack(x)
         return logits
 
@@ -43,15 +44,15 @@ def train(dataloader, model, loss_fn, optimizer, device):
     size = len(dataloader.dataset)
     model.train()
     for batch, (X, y) in enumerate(dataloader):
-        print(f"X: {X}")
-        print(f"y: {y}")
+        X = X.to(torch.float)
+        y = y.to(torch.float)
+        target_y = torch.tensor(y, dtype=torch.long, device=device)
         X, y = X.to(device), y.to(device)
-        print(f"X: {X}")
-        print(f"y: {y}")
 
         # Compute prediction error
+
         pred = model(X)
-        loss = loss_fn(pred, y)
+        loss = loss_fn(pred, target_y)
 
         # Backpropagation
         optimizer.zero_grad()
@@ -70,9 +71,12 @@ def test(dataloader, model, loss_fn, device):
     test_loss, correct = 0, 0
     with torch.no_grad():
         for X, y in dataloader:
+            X = X.to(torch.float)
+            y = y.to(torch.float)
             X, y = X.to(device), y.to(device)
+            target_y = torch.tensor(y, dtype=torch.long, device=device)
             pred = model(X)
-            test_loss += loss_fn(pred, y).item()
+            test_loss += loss_fn(pred, target_y).item()
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
     test_loss /= num_batches
     correct /= size
@@ -106,8 +110,8 @@ def main():
     epochs = 5
     for t in range(epochs):
         print(f"Epoch {t+1}\n-------------------------------")
-        train(train_dataloader, model, loss_fn, optimizer)
-        test(test_dataloader, model, loss_fn)
+        train(train_dataloader, model, loss_fn, optimizer, device)
+        test(test_dataloader, model, loss_fn, device)
     print("Done!")
 
 
@@ -115,11 +119,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-"""
-	X = torch.rand(9, device=device)
-	logits = model(X)
-	pred_probab = nn.Softmax()(logits)
-	y_pred = pred_probab.argmax(1)
-	print(f"Predicted class: {y_pred}")
-"""
