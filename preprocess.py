@@ -2,8 +2,8 @@ import torch
 from transformers import BertTokenizer, BertModel
 from scipy.stats import spearmanr
 
-tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
-model = BertModel.from_pretrained("bert-base-uncased")
+tokenizer = BertTokenizer.from_pretrained("bert-base-multilingual-cased")
+model = BertModel.from_pretrained("bert-base-multilingual-cased")
 
 # tokenize all sentences in the corpus, then extract and pool embeddings
 def convert_corpus(corpus: list[(str, bool)]) -> list[(str, list[float], bool)]:
