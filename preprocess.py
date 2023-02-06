@@ -1,7 +1,7 @@
 import torch
 from transformers import BertTokenizer, BertModel
 from scipy.stats import spearmanr
-#use multilingual Bert??
+
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 model = BertModel.from_pretrained("bert-base-uncased")
 

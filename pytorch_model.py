@@ -20,18 +20,18 @@ data_test = [
 
 # define NeuralNetwork class
 class NeuralNetwork(nn.Module):
-    def __init__(self):
+    def __init__(self, input_size=9, hidden_size=3):
         super(NeuralNetwork, self).__init__()
-        self.input_size = 9
-        self.output_size = 3
+        self.input_size = input_size
+        self.hidden_size = hidden_size
         # TODO still need to fix the in_features and out_features
         # integers for nn.Linear functions
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(self.input_size, self.output_size),
+            nn.Linear(self.input_size, self.hidden_size),
             nn.ReLU(),
-            nn.Linear(self.output_size, self.output_size),
+            nn.Linear(self.hidden_size, self.hidden_size),
             nn.ReLU(),
-            nn.Linear(self.output_size, 2),
+            nn.Linear(self.hidden_size, 2),
         )
 
     def forward(self, x):
