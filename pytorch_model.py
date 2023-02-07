@@ -70,8 +70,6 @@ def test(dataloader, model, loss_fn, device):
     num_batches = len(dataloader)
     model.eval()
     test_loss, correct = 0, 0
-    y_gold = []
-    y_pred = []
     with torch.no_grad():
         for X, y in dataloader:
             X = X.to(torch.float)
@@ -79,15 +77,13 @@ def test(dataloader, model, loss_fn, device):
             X, y = X.to(device), y.to(device)
             target_y = torch.tensor(y, dtype=torch.long, device=device)
             pred = model(X)
-            preds = torch.argmax(pred.data, 1)
             test_loss += loss_fn(pred, target_y).item()
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
             
     test_loss /= num_batches
     correct /= size
-    f_score = f1_score(y.data, preds)
     print(
-        f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \nF1-Score: {f_score} \n"
+        f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n"
     )
 
 

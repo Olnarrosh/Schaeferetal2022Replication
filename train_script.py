@@ -89,5 +89,23 @@ def train_model(corpus: str, model):
             pickle.dump(trained_svm, open(filename, "wb"))
 
 
+def eval_model(model: str, corpus: str):
+	# open validation portion of corpus
+	with open(f"val_{corpus}_file.pkl", "rb") as file:
+		val_list = pickle.load(file)
+	
+	# TODO open gold list of corpus
+
+	# load (TODO and run) models 
+	# TODO -> get prediction lists
+	if model == "pytorch":
+		loaded_model = torch.load("pytorch_model.pt")
+		loaded_model.eval()
+	else:
+		loaded_model = pickle.load(open(f"{model}_model.sav", 'rb'))
+	# TODO run evaluation Method (sklearn precision, recall and f1-Score)
+	# TODO print out / save Evaluation results
+
+
 if __name__ == "__main__":
 	pass
