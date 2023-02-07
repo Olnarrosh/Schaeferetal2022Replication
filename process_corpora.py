@@ -9,19 +9,21 @@ import pickle
 def get_cmv_ready():
     loadedcorpus = parse_cmv.parse_cmv_corpus()
     finallist = preprocess.convert_corpus(loadedcorpus)
-    print(finallist)
+    print(len(finallist))
     # shuffle to avoid order bias
     random.shuffle(finallist)
-    print(finallist)
+    print(len(finallist))
     # 90% Training, 10% validation
     train_cmv = finallist[0:int(len(finallist)*0.9)]
+    print(len(train_cmv))
     validate_cmv = finallist[int(len(finallist)*0.9):]
+    print(len(validate_cmv))
     with open("train_cmv_file.pkl", "wb") as train_cmv_file:
         pickle.dump(train_cmv, train_cmv_file)
     with open("val_cmv_file.pkl", "wb") as val_cmv_file:
         pickle.dump(validate_cmv, val_cmv_file)
 
-
+"""
 # ATTENTION: following four methods can't load corpus yet! (still copy pasted from cmv)
 def get_usdeb_ready():
     loadedcorpus = parse_cmv.parse_cmv_corpus()
@@ -145,20 +147,29 @@ def get_without_essay_ready():
     with open("leave_essay_out.pkl", "wb") as leave_essay_out:
         pickle.dump(merged_without_essay, leave_essay_out)
 
-
-def create_gold_cmv():
-    with open("val_cmv_file.pkl", "rb") as f:
+"""
+# input should be eval split of corpus
+def create_gold_list(corpus:str):
+    with open(f"val_{corpus}_file.pkl", "rb") as f:
         cmv = pickle.load(f)
-    print(cmv)
+    goldlist  = []
+    for i in cmv:
+        goldlist.append(i[2])
+    with open(f"gold_{corpus}_list.pkl", "wb") as goldfile:
+        pickle.dump(goldlist, goldfile)
+
+
 
 
 
 
 if __name__ == "__main__":
-    """
-    get_cmv_ready()
-    with open("train_cmv_file.pkl", "rb") as f:
-        vla = pickle.load(f)
-    print(vla)
-    """
-    create_gold_cmv()
+
+    #with open("train_cmv_file.pkl", "rb") as f:
+         #= pickle.load(f)
+    create_gold_list("cmv")
+    with open("gold_cmv_list.pkl", "rb") as a:
+        print(a)
+
+
+
