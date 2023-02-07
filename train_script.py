@@ -94,7 +94,9 @@ def eval_model(model: str, corpus: str):
 	with open(f"val_{corpus}_file.pkl", "rb") as file:
 		val_list = pickle.load(file)
 	
-	# TODO open gold list of corpus
+	# open gold list of corpus
+	with open(f"gold_{corpus}_list.pkl") as gold:
+		gold_list = pickle.load(gold)
 
 	# load (TODO and run) models 
 	# TODO -> get prediction lists

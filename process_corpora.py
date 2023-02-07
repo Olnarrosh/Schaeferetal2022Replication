@@ -1,4 +1,4 @@
-import preprocess, parse_cmv
+import preprocess, parse_cmv, parse_micro
 import random
 import pickle
 # get all tuple lists from the 5 corpora
@@ -22,6 +22,45 @@ def get_cmv_ready():
         pickle.dump(train_cmv, train_cmv_file)
     with open("val_cmv_file.pkl", "wb") as val_cmv_file:
         pickle.dump(validate_cmv, val_cmv_file)
+
+def get_corpus_ready(corpus: str):
+    match corpus:
+        case "cmv":
+            loadedcorpus = parse_cmv.parse_cmv_corpus()
+        case "essay":
+            loadedcorpus = [] # TODO parse_essay()
+        case "usdeb":
+            loadedcorpus = [] # TODO parse_usdeb()
+        case "mardy":
+            loadedcorpus = [] # TODO parse_mardy()
+        case "micro":
+            loadedcorpus = parse_micro.parse_micro_corpus()
+
+    finallist = preprocess.convert_corpus(loadedcorpus)
+    random.shuffle(finallist)
+    train = finallist[0:int(len(finallist)*0.9)]
+    print(len(train))
+    validate = finallist[int(len(finallist)*0.9):]
+    print(len(validate))
+
+    with open(f"train_{corpus}_file.pkl", "wb") as file_train:
+        pickle.dump(train, file_train)
+    with open(f"val_{corpus}_file.pkl", "wb") as file_val:
+        pickle.dump(validate, file_val)
+
+# functionally equivalent to get_usdeb_ready(), but should work for all corpora
+def get_leave_one_out(leave_out:str, corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
+    # corpora == list with names of all corpora ( == ["cmv", "essay", "mardy", "micro", "usdeb"])
+    merged = []
+    for corpus in corpora:
+        if corpus != leave_out:
+            with open(f"train_{corpus}_file.pkl", "rb") as g:
+                corp = pickle.load(g)
+                merged.extend(corp)
+        
+    with open("leave_{leave_out}_out.pkl", "wb") as file:
+        pickle.dump(merged, file)
+            
 
 """
 # ATTENTION: following four methods can't load corpus yet! (still copy pasted from cmv)
@@ -165,11 +204,12 @@ def create_gold_list(corpus:str):
 
 if __name__ == "__main__":
 
-    #with open("train_cmv_file.pkl", "rb") as f:
-         #= pickle.load(f)
-    create_gold_list("cmv")
+    get_corpus_ready("micro")
+
+    create_gold_list("micro")
     with open("gold_cmv_list.pkl", "rb") as a:
-        print(a)
+        gold_list = pickle.load(a)
+        print(gold_list)
 
 
 
