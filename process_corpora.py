@@ -1,4 +1,4 @@
-import corpus2embeddings, parse_cmv
+import preprocess, parse_cmv
 import random
 import pickle
 # get all tuple lists from the 5 corpora
@@ -8,7 +8,7 @@ import pickle
 
 def get_cmv_ready():
     loadedcorpus = parse_cmv.parse_cmv_corpus()
-    finallist = corpus2embeddings.convert_corpus(loadedcorpus)
+    finallist = preprocess.convert_corpus(loadedcorpus)
     print(finallist)
     # shuffle to avoid order bias
     random.shuffle(finallist)
@@ -25,7 +25,7 @@ def get_cmv_ready():
 # ATTENTION: following four methods can't load corpus yet! (still copy pasted from cmv)
 def get_usdeb_ready():
     loadedcorpus = parse_cmv.parse_cmv_corpus()
-    tuplelist = corpus2embeddings.convert_corpus(loadedcorpus)
+    tuplelist = preprocess.convert_corpus(loadedcorpus)
     # shuffle to avoid order bias
     finallist = random.shuffle(tuplelist)
     # 90% Training, 10% validation
@@ -38,7 +38,7 @@ def get_usdeb_ready():
 
 def get_micro_ready():
     loadedcorpus = parse_cmv.parse_cmv_corpus()
-    tuplelist = corpus2embeddings.convert_corpus(loadedcorpus)
+    tuplelist = preprocess.convert_corpus(loadedcorpus)
     # shuffle to avoid order bias
     finallist = random.shuffle(tuplelist)
     # 90% Training, 10% validation
@@ -51,7 +51,7 @@ def get_micro_ready():
 
 def get_mardy_ready():
     loadedcorpus = parse_cmv.parse_cmv_corpus()
-    tuplelist = corpus2embeddings.convert_corpus(loadedcorpus)
+    tuplelist = preprocess.convert_corpus(loadedcorpus)
     # shuffle to avoid order bias
     finallist = random.shuffle(tuplelist)
     # 90% Training, 10% validation
@@ -65,7 +65,7 @@ def get_mardy_ready():
 
 def get_essay_ready():
     loadedcorpus = parse_cmv.parse_cmv_corpus()
-    tuplelist = corpus2embeddings.convert_corpus(loadedcorpus)
+    tuplelist = preprocess.convert_corpus(loadedcorpus)
     # shuffle to avoid order bias
     finallist = random.shuffle(tuplelist)
     # 90% Training, 10% validation
@@ -146,10 +146,19 @@ def get_without_essay_ready():
         pickle.dump(merged_without_essay, leave_essay_out)
 
 
+def create_gold_cmv():
+    with open("val_cmv_file.pkl", "rb") as f:
+        cmv = pickle.load(f)
+    print(cmv)
+
+
+
 
 if __name__ == "__main__":
+    """
     get_cmv_ready()
     with open("train_cmv_file.pkl", "rb") as f:
         vla = pickle.load(f)
     print(vla)
-
+    """
+    create_gold_cmv()
