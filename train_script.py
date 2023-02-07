@@ -28,7 +28,7 @@ def train_model(corpus: str, model):
             print(f"Using {device} device")
 
             # get input and output sizes for model
-            input_size = train_list[0][1].length()
+            input_size = len(train_list[0][1])
             hidden_size = 256
 
             #create model
@@ -90,33 +90,4 @@ def train_model(corpus: str, model):
 
 
 if __name__ == "__main__":
-
-
-"""
-train_dataset = CustomEmbeddingDataset(data_train)
-    test_dataset = CustomEmbeddingDataset(data_test)
-
-    # use DataLoaders to read in CustomDataset objects
-    train_dataloader = DataLoader(train_dataset, batch_size=1, shuffle=True)
-    test_dataloader = DataLoader(test_dataset, batch_size=1, shuffle=True)
-
-    # define Device that is used to compute
-    
-
-    model = NeuralNetwork().to(device)
-    print(model)
-
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
-
-    train(train_dataloader, model, loss_fn, optimizer, device)
-
-    test(test_dataloader, model, loss_fn, device)
-
-    epochs = 5
-    for t in range(epochs):
-        print(f"Epoch {t+1}\n-------------------------------")
-        train(train_dataloader, model, loss_fn, optimizer, device)
-        test(test_dataloader, model, loss_fn, device)
-    print("Done!")
-"""
+	pass
