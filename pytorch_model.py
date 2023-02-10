@@ -7,7 +7,7 @@ from sklearn.metrics import f1_score
 # dummy-Datensatz for testing purposes
 
 data_train = [
-	["Das ist ein Test Satz", [1.0, 2.0, 0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], 1.0],
+    ["Das ist ein Test Satz", [1.0, 2.0, 0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], 1.0],
     ["Dieses Model wird super", [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 0.0],
     ["Ich brauche noch einen dritten Satz", [40.0, 10.0, 0.0, 41.0, 34.0, 89.0, 356.0, 8.0, 154.0], 1.0],
 ]
@@ -16,6 +16,8 @@ data_test = [
     ["Wow, noch mehr Sätze", [4.0, 5.0, 0.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0], 1.0],
     ["Test-Satz nummer 2", [0.0, 15.0, 1.0, 1.0, 3.0, 4.0, 3.0, 8.0, 0.0], 0.0],
     ["Und Drittens", [1.0, 6.0, 0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], 1.0],
+    ["Das ist ein Test Satz", [1.0, 2.0, 0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], 1.0],
+    ["Ich brauche noch einen dritten Satz", [40.0, 10.0, 0.0, 41.0, 34.0, 89.0, 356.0, 8.0, 154.0], 1.0]
 ]
 
 
@@ -66,26 +68,68 @@ def train(dataloader, model, loss_fn, optimizer, device):
 
 
 def test(dataloader, model, loss_fn, device):
+    pred_list = []
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
     model.eval()
-    test_loss, correct = 0, 0
+    test_loss, correct, test_correct, counter = 0, 0, 0, 0
     with torch.no_grad():
         for X, y in dataloader:
+            print(f"this is iteration number: {counter}")
             X = X.to(torch.float)
             y = y.to(torch.float)
             X, y = X.to(device), y.to(device)
             target_y = torch.tensor(y, dtype=torch.long, device=device)
             pred = model(X)
+            preds = torch.argmax(pred,1)
             test_loss += loss_fn(pred, target_y).item()
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+            test_correct += (pred.argmax(1) == y)
+            
+            if pred.argmax(1) == y:
+                pred_list.append(1)
+                print("prediction was right")
+            else:
+                pred_list.append(0)
+                print("prediction was wrong")
+            counter += 1
             
     test_loss /= num_batches
     correct /= size
     print(
         f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n"
     )
+    print(f"correct: {correct}\ntest_correct: {test_correct}\npred: {pred}\npreds: {preds}\npred_list: {pred_list}\ncounter: {counter}\n")
 
+
+def make_predictions(dataloader, model, device):
+    pred_list = []
+    size = len(dataloader.dataset)
+    model.eval()
+    correct, test_correct, counter = 0, 0, 0
+    with torch.no_grad():
+        for X, y in dataloader:
+            print(f"this is iteration number: {counter}")
+            X = X.to(torch.float)
+            y = y.to(torch.float)
+            X, y = X.to(device), y.to(device)
+            pred = model(X)
+            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+            test_correct += (pred.argmax(1) == y)
+            
+            if pred.argmax(1) == y:
+                pred_list.append(1)
+                print("prediction was right")
+            else:
+                pred_list.append(0)
+                print("prediction was wrong")
+            counter += 1
+            
+    correct /= size
+    #print(
+    #    f"Accuracy: {correct}\ntest_correct: {test_correct}\npred: {pred}\npred_list: {pred_list}\ncounter: {counter}\n"
+    #    )
+    return pred_list
 
 def main():
     train_dataset = CustomEmbeddingDataset(data_train)
