@@ -27,6 +27,7 @@ def create_decision_vec(corpuslist):
         vector.append(i[2])
     return vector
 
+
 # merge matrix and vector function to have input for models in one place
 def create_sklearn_input(corpuslist):
     return create_matrix(corpuslist), create_decision_vec(corpuslist)
@@ -42,7 +43,8 @@ def train_lr(corpuslist):
 
 # predict with logisticRegression class and matrix you want to be classified as input
 # returns np array that contains the predicted class labels (length = num of lines of input matrix)
-def predict_lr(clf_lr, inputmatrix):
+def predict_lr(clf_lr, corpuslist):
+    inputmatrix = create_matrix(corpuslist)
     pred_lr = clf_lr.predict(inputmatrix)
     return pred_lr
 
@@ -59,7 +61,8 @@ def train_rf(corpuslist):
     clf_rf = RandomForestClassifier(random_state=0).fit(matrix, vector)
     return clf_rf
 
-def predict_rf(rf_mlp, inputmatrix):
+def predict_rf(rf_mlp, corpuslist):
+    inputmatrix = create_matrix(corpuslist)
     pred_rf = rf_mlp.predict(inputmatrix)
     return pred_rf
 
@@ -77,7 +80,8 @@ def train_svm(corpuslist):
     clf_svm = svm.SVC().fit(matrix, vector)
     return clf_svm
 
-def predict_svm(clf_svm, inputmatrix):
+def predict_svm(clf_svm, corpuslist):
+    inputmatrix = create_matrix(corpuslist)
     pred_svm = (clf_svm.predict(inputmatrix))
     return pred_svm
 
@@ -110,6 +114,10 @@ def computefscore(true, pred):
 def computeaccuracy(true, pred):
     return accuracy_score(true, pred)
 
+
+# method to join all evaluation methods in one
+def run_evaluation(true, pred):
+    return computeprecision(true, pred), computerecall(true, pred), computefscore(true, pred)
 
 
 
@@ -144,7 +152,7 @@ if __name__ == "__main__":
     #this is important!! how to open pickle again!!
     entpickled = pickle.load(open("testfile.sav", "rb"))
     #print(type(trainedobj))
-    res = predict_lr(entpickled, [[124.0, 2412.0, 3.0, 9.0], [0.0, 0.0, 1.0, 24.0], [234.0, 124.0, 523.0, 632154.0], [1.0, 2.0, 32523.0, 423.0]])
+    res = predict_lr(entpickled, [("bla", [124.0, 2412.0, 3.0, 9.0], 0), ("qasf", [0.0, 0.0, 1.0, 24.0], 1), ("öalsg",[234.0, 124.0, 523.0, 632154.0], 1), ("saijhg", [1.0, 2.0, 32523.0, 423.0], 0)])
     print(res)
     print(computefscore([1, 0, 1, 0], res), computeaccuracy([1, 0, 1, 1], res))
     """

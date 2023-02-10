@@ -6,12 +6,12 @@ from torch import nn
 import pickle
 
 
-# script to run train pipeline
+# script to run train and evaluation pipeline
 # only change parameters for corpus and model
 # 20 trainobjects
 
 def train_model(corpus: str, model):
-    # add matrix and vcotr
+    # add matrix and vecotr
     # switch case for 4 models
     match model:
         case "PyTorch":
@@ -89,16 +89,29 @@ def eval_model(model: str, corpus: str):
     with open(f"gold_{corpus}_list.pkl") as gold:
         gold_list = pickle.load(gold)
 
-    # load (TODO and run) models
-    # TODO -> get prediction lists
+    # load models and get prediction lists
+    # TODO -> get prediction list for pytorch
+
     if model == "pytorch":
         loaded_model = torch.load("pytorch_model.pt")
         loaded_model.eval()
+        #predlist = fehlt noch
     else:
         loaded_model = pickle.load(open(f"{model}_model.sav", 'rb'))
 
+        match model:
+            case "LogisticRegression":
+                # evaluate
+                predlist = sklearnfile.predict_lr(loaded_model, val_list)
+            case "RandomForest":
+                # evaluate
+                predlist = sklearnfile.predict_rf(loaded_model, val_list)
+            case "SVM":
+                # evaluate
+                predlist = sklearnfile.predict_svm(loaded_model, val_list)
 
-# TODO run evaluation Method (sklearn precision, recall and f1-Score)
+    #run evaluation method to get precision, recall and Fscore
+    print(sklearnfile.run_evaluation(gold_list, predlist))
 # TODO print out / save Evaluation results
 
 
