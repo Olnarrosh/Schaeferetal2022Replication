@@ -188,11 +188,12 @@ def get_without_essay_ready():
 
 """
 # input should be eval split of corpus
+# output: list with gold values (0 or 1)
 def create_gold_list(corpus:str):
     with open(f"val_{corpus}_file.pkl", "rb") as f:
-        cmv = pickle.load(f)
+        file = pickle.load(f)
     goldlist  = []
-    for i in cmv:
+    for i in file:
         goldlist.append(i[2])
     with open(f"gold_{corpus}_list.pkl", "wb") as goldfile:
         pickle.dump(goldlist, goldfile)

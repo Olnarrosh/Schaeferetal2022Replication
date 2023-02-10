@@ -27,13 +27,16 @@ def create_decision_vec(corpuslist):
         vector.append(i[2])
     return vector
 
-
+# merge matrix and vector function to have input for models in one place
+def create_sklearn_input(corpuslist):
+    return create_matrix(corpuslist), create_decision_vec(corpuslist)
 
 
 
 #trains a classifier using logistic regression
-#input: matrix and vector relative to matrix
-def train_lr(matrix, vector):
+#input: corpuslist of format [(str, embedding, bool),...]
+def train_lr(corpuslist):
+    matrix, vector = create_sklearn_input(corpuslist)
     clf_lr = LogisticRegression(random_state=0).fit(matrix, vector)
     return clf_lr
 
@@ -50,8 +53,9 @@ def predict_lr(clf_lr, inputmatrix):
 
 
 #trains a classifier using a random forest classifier
-#input: matrix and vector relative to matrix
-def train_rf(matrix, vector):
+#input: corpuslist of format [(str, embedding, bool),...]
+def train_rf(corpuslist):
+    matrix, vector = create_sklearn_input(corpuslist)
     clf_rf = RandomForestClassifier(random_state=0).fit(matrix, vector)
     return clf_rf
 
@@ -67,8 +71,9 @@ def predict_rf(rf_mlp, inputmatrix):
 
 
 #trains a classifier using a support vector machine
-#input: matrix and vector relative to matrix
-def train_svm(matrix, vector):
+#input: corpuslist of format [(str, embedding, bool),...]
+def train_svm(corpuslist):
+    matrix, vector = create_sklearn_input(corpuslist)
     clf_svm = svm.SVC().fit(matrix, vector)
     return clf_svm
 
@@ -128,11 +133,11 @@ if __name__ == "__main__":
     #print(type(traindone))
     #predictone = tuplelist[0][1]
     #print(predict_svm(traindone, [predictone]))
-    
+    """
     testdatei = [("bla", [1.0, 2.0, 32523.0, 423.0], 0), ("bla", [1235.0, 223562.0, 32234523.0, 42233.0], 1), ("blsdfa", [84351.0, 2.0, 325423.0, 3.0], 1), ("blasfa", [1.0, 2.0, 32523.0, 423.0], 0)]
-    testmatrix = create_matrix(testdatei)
-    testvec = create_decision_vec(testdatei)
-    trainedobj = train_lr(testmatrix, testvec)
+    #testmatrix = create_matrix(testdatei)
+    #testvec = create_decision_vec(testdatei)
+    trainedobj = train_lr(testdatei)
     filename = "testfile.sav"
     print("training done")
     pickle.dump(trainedobj, open(filename, "wb"))
@@ -148,6 +153,6 @@ if __name__ == "__main__":
     print("loaded corpus")
     tuplelist = preprocess.convert_corpus(loadedcorpus)
     print(len(tuplelist))
-
+    """
 
 
