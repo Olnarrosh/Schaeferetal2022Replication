@@ -112,7 +112,6 @@ def make_predictions(data_list, model, device="cpu"):
     correct, test_correct, counter = 0, 0, 0
     with torch.no_grad():
         for X, y in data_dataloader:
-            print(f"this is iteration number: {counter}")
             X = X.to(torch.float)
             y = y.to(torch.float)
             X, y = X.to(device), y.to(device)
@@ -122,16 +121,14 @@ def make_predictions(data_list, model, device="cpu"):
             
             if pred.argmax(1) == y:
                 pred_list.append(1)
-                print("prediction was right")
+            
             else:
                 pred_list.append(0)
-                print("prediction was wrong")
+            
             counter += 1
             
     correct /= size
-    #print(
-    #    f"Accuracy: {correct}\ntest_correct: {test_correct}\npred: {pred}\npred_list: {pred_list}\ncounter: {counter}\n"
-    #    )
+    print(pred_list)
     return pred_list
 
 def main():

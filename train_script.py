@@ -19,7 +19,7 @@ def train_model(corpus: str, model: str):
             with open(f"train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
 
-            pytorch_model = mod.train_model(train_list)
+            pytorch_model = mod.train_model(train_list, num_epochs=10)
 
             torch.save(pytorch_model, "pytorch_model.pt")
 
@@ -91,5 +91,5 @@ def eval_model(corpus: str, model: str, ):
 
 
 if __name__ == "__main__":
-    train_model("micro", "pytorch")
+    train_model("cmv", "pytorch")
     eval_model("cmv", "pytorch")

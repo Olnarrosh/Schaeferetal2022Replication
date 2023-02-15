@@ -206,12 +206,23 @@ def create_gold_list(corpus:str):
 
 if __name__ == "__main__":
 
-    #get_corpus_ready("micro")
+    # get_corpus_ready("essay")
 
-    create_gold_list("cmv")
-    with open("gold_cmv_list.pkl", "rb") as a:
-        gold_list = pickle.load(a)
-        print(gold_list)
+    # create_gold_list("essay")
+    
+    with open("gold_essay_list.pkl", "rb") as a:
+        essay_gold_list = pickle.load(a)
+    
+    with open("gold_cmv_list.pkl", "rb") as cmgold:
+        cmv_gold_list = pickle.load(cmgold)
+    
+    counter = 0
+    max_lenght = min(len(essay_gold_list), len(cmv_gold_list))
+    for a, b in zip(essay_gold_list[:max_lenght], cmv_gold_list[:max_lenght]):
+        if a == b:
+            counter += 1
+    print(f"{counter / max_lenght}")
+        
 
 
 
