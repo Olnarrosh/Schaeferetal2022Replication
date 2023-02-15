@@ -62,7 +62,7 @@ def get_leave_one_out(leave_out:str, corpora=["cmv", "essay", "micro"]):
                 corp = pickle.load(g)
                 merged.extend(corp)
         
-    with open("leave_{leave_out}_out.pkl", "wb") as file:
+    with open("train_without_{leave_out}_file.pkl", "wb") as file:
         pickle.dump(merged, file)
             
 

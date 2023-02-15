@@ -1,6 +1,3 @@
-"""
-@Author Tana Deeg and Sandro Weick
-"""
 import sklearnfile
 from custom_dataset_pytorch import CustomEmbeddingDataset
 import pytorch_model as mod
@@ -12,7 +9,7 @@ import pickle
 # script to run train and evaluation pipeline
 # only change parameters for corpus and model
 # 20 trainobjects
-
+# input: corpus str must be either "corpus" or "without_corpus" (for leave-one-out approach)
 def train_model(corpus: str, model: str):
     # add matrix and vecotr
     # switch case for 4 models
@@ -22,7 +19,7 @@ def train_model(corpus: str, model: str):
             with open(f"train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
 
-            pytorch_model = mod.train_model(train_list, num_epochs=10)
+            pytorch_model = mod.train_model(train_list)
 
             torch.save(pytorch_model, "pytorch_model.pt")
 
@@ -94,5 +91,5 @@ def eval_model(corpus: str, model: str, ):
 
 
 if __name__ == "__main__":
-    train_model("cmv", "pytorch")
+    train_model("micro", "pytorch")
     eval_model("cmv", "pytorch")
