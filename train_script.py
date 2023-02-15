@@ -1,3 +1,6 @@
+"""
+@Author Tana Deeg and Sandro Weick
+"""
 import sklearnfile
 from custom_dataset_pytorch import CustomEmbeddingDataset
 import pytorch_model as mod

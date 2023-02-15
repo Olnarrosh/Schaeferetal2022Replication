@@ -1,3 +1,6 @@
+"""
+@Author Tana Deeg and Sandro Weick
+"""
 import parse_essay
 import preprocess, parse_cmv, parse_micro, parse_essay
 import random

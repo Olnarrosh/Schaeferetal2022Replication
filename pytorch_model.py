@@ -1,3 +1,6 @@
+"""
+@Author Sandro Weick
+"""
 import torch
 from torch.utils.data import DataLoader
 from custom_dataset_pytorch import CustomEmbeddingDataset
