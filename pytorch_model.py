@@ -26,6 +26,13 @@ data_test = [
 
 # define NeuralNetwork class
 class NeuralNetwork(nn.Module):
+    """
+    Custom implementation of a Pytorch Neural Network.
+    This NN uses a Sequential, linear relu stack and consists of 
+    three layers. 
+    Both input- and hidden-layer size are default arguments and therefore
+    can be changed when creating a new Model. 
+    """
     def __init__(self, input_size=9, hidden_size=3):
         super(NeuralNetwork, self).__init__()
         self.input_size = input_size
@@ -47,6 +54,9 @@ class NeuralNetwork(nn.Module):
 
 
 def train(dataloader, model, loss_fn, optimizer, device):
+    """
+    This Method represents one training iteration for the NN-Pytorch-Model.
+    """
     size = len(dataloader.dataset)
     model.train()
     for batch, (X, y) in enumerate(dataloader):
@@ -71,6 +81,9 @@ def train(dataloader, model, loss_fn, optimizer, device):
 
 
 def test(dataloader, model, loss_fn, device):
+    """
+    A little test function for testing purposes only
+    """
     pred_list = []
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
@@ -106,6 +119,10 @@ def test(dataloader, model, loss_fn, device):
 
 
 def make_predictions(data_list, model, device="cpu"):
+    """
+    A function that returns a list of predictions(1 or 0) for
+    the given input data_list.
+    """
     data_dataset = CustomEmbeddingDataset(data_list)
     data_dataloader = DataLoader(data_dataset, batch_size=1, shuffle=False)
     
@@ -135,6 +152,11 @@ def make_predictions(data_list, model, device="cpu"):
     return pred_list
 
 def main():
+    """
+    A little main function that represents the entire Workflow
+    for creating and testing the Pytorch Model.
+    For testing purposes only.
+    """
     train_dataset = CustomEmbeddingDataset(data_train)
     test_dataset = CustomEmbeddingDataset(data_test)
 
@@ -165,6 +187,10 @@ def main():
 
 
 def train_model(train_data: list, hidden_size=256, num_epochs=5):
+    """
+    A training function for the Model.
+    This trains the Model on train_data and returns the Model.
+    """
     train_dataset = CustomEmbeddingDataset(train_data)
     train_dataloader = DataLoader(train_dataset)
     device = "cuda" if torch.cuda.is_available() else "cpu"
