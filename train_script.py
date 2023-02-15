@@ -19,35 +19,9 @@ def train_model(corpus: str, model):
             with open(f"train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
 
-            # custom_dataset_pytorch read in data
-            train_dataset = CustomEmbeddingDataset(train_list)
+            pytorch_model = mod.train_model(train_list)
 
-            # use DataLoader, don`t shuffle, data is "pre"-shuffled
-            train_dataloader = mod.DataLoader(train_dataset)
-
-            device = "cuda" if torch.cuda.is_available() else "cpu"
-            print(f"Using {device} device")
-
-            # get input and output sizes for model
-            input_size = len(train_list[0][1])
-            hidden_size = 256
-
-            # create model
-            model = mod.NeuralNetwork(input_size=input_size, hidden_size=hidden_size).to(device)
-            print(model)
-
-            loss_fn = nn.CrossEntropyLoss()
-            optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
-
-            # mod.train(train_dataloader, model, loss_fn, optimizer, device)
-
-            epochs = 5
-            for t in range(epochs):
-                print(f"Epoch {t + 1}\n-------------------------------")
-                mod.train(train_dataloader, model, loss_fn, optimizer, device)
-            print("Done!")
-
-            torch.save(model, "pytorch_model.pt")
+            torch.save(pytorch_model, "pytorch_model.pt")
 
         case "LogisticRegression":
             # open pickle file with data
