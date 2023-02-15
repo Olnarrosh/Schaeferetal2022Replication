@@ -161,6 +161,29 @@ def main():
     print("Done!")
 
 
+def train_model(train_data: list, hidden_size=256, num_epochs=5):
+    train_dataset = CustomEmbeddingDataset(train_data)
+    train_dataloader = DataLoader(train_dataset)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"Using {device} device")
+    input_size = len(train_data[0][1])
+    hidden_size = 256
+    
+    model = NeuralNetwork(input_size=input_size, hidden_size=hidden_size).to(device)
+    print(model)
+    
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+    
+    epochs = num_epochs
+    for t in range(epochs):
+        print(f"Epoch {t + 1}\n-------------------------------")
+        train(train_dataloader, model, loss_fn, optimizer, device)
+        print("Done!")
+    
+    return model            
+
+
 # test NeuralNetwork
 if __name__ == "__main__":
     main()
