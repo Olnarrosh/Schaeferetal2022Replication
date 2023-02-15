@@ -2,7 +2,9 @@
 @Author Tana Deeg
 """
 import sklearn
-from sklearn.linear_model import LogisticRegression, RandomForestClassifier, svm
+from sklearn.linear_model import LogisticRegression
+from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score
 import numpy as np
 import preprocess
@@ -80,32 +82,10 @@ def predict_svm(clf_svm, corpuslist):
 
 
 
-# compute precision
+# Compute Precision, Recall and FScore
 # input: two lists of same length (gold and pred) containing the class labels -> should fit output of predict method
-def computeprecision(true, pred):
-    return precision_score(true, pred)
-
-# compute recall
-# input: two lists of same length (gold and pred) containing the class labels -> should fit output of predict method
-def computerecall(true, pred):
-    return recall_score(true, pred)
-
-
-# compute fscore
-# input: two lists of same length (gold and pred) containing the class labels -> should fit output of predict method
-def computefscore(true, pred):
-    return f1_score(true, pred)
-
-
-# compute accuracy
-# input: two lists of same length (gold and pred) containing the class labels -> should fit output of predict method
-def computeaccuracy(true, pred):
-    return accuracy_score(true, pred)
-
-
-# method to join all evaluation methods in one
 def run_evaluation(true, pred):
-    return computeprecision(true, pred), computerecall(true, pred), computefscore(true, pred)
+    return precision_score(true, pred), recall_score(true, pred), f1_score(true, pred), accuracy_score(true, pred)
 
 
 

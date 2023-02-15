@@ -1,3 +1,6 @@
+"""
+@Author Tana Deeg and Sandro Weick
+"""
 import sklearnfile
 from custom_dataset_pytorch import CustomEmbeddingDataset
 import pytorch_model as mod
@@ -80,18 +83,19 @@ def eval_model(corpus: str, model: str, ):
                 predlist = sklearnfile.predict_svm(loaded_model, val_list)
 
     #run evaluation method to get precision, recall and Fscore
-    precision, recall, f1_score = sklearnfile.run_evaluation(gold_list, predlist)
+    precision, recall, f1_score, accuracy = sklearnfile.run_evaluation(gold_list, predlist)
     eval_dict = {
         "precision": precision,
         "recall": recall,
-        "f1_score": f1_score
+        "f1_score": f1_score,
+        "accuracy": accuracy
         }
-    print(f"Precision: {precision}, Recall: {recall}, F-Score: {f1_score}")
+    print(f"Precision: {precision}, Recall: {recall}, F-Score: {f1_score}, Accuracy: {accuracy}")
     with open(f"{corpus}_{model}_evaluation.pkl", "wb") as file:
         pickle.dump(eval_dict, file)
 # TODO print out / save Evaluation results
 
 
 if __name__ == "__main__":
-    train_model("micro", "pytorch")
+    train_model("cmv", "pytorch")
     eval_model("cmv", "pytorch")
