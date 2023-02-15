@@ -1,10 +1,13 @@
+"""
+@Author Sandro Weick
+"""
 import torch
 from torch.utils.data import Dataset
 import numpy as np
 
 # read in pre porcessed data for pytorch Model
 
-# dummy-Datensatz
+# dummy-Data for testing purposes
 
 data_train = [
     ["Das ist ein Test Satz", [1, 2, 0, 4, 5, 6, 7, 8, 9], 1],
@@ -20,6 +23,11 @@ data_test = [
 
 
 class CustomEmbeddingDataset(Dataset):
+    """
+    Custom implementation of the pytorch Dataset Class
+    The important features for pytorch are the sentence embeddings
+    and the sentence label
+    """
     def __init__(self, embeddings_list):
         self.emb_list = embeddings_list
 
