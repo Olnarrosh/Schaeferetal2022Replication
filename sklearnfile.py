@@ -61,6 +61,8 @@ def train_rf(corpuslist):
     clf_rf = RandomForestClassifier(random_state=0).fit(matrix, vector)
     return clf_rf
 
+# predict with random forest class and matrix you want to be classified as input
+# returns np array that contains the predicted class labels (length = num of lines of input matrix)
 def predict_rf(rf_mlp, corpuslist):
     inputmatrix = create_matrix(corpuslist)
     pred_rf = rf_mlp.predict(inputmatrix)
@@ -80,6 +82,8 @@ def train_svm(corpuslist):
     clf_svm = svm.SVC().fit(matrix, vector)
     return clf_svm
 
+# predict with svm class and matrix you want to be classified as input
+# returns np array that contains the predicted class labels (length = num of lines of input matrix)
 def predict_svm(clf_svm, corpuslist):
     inputmatrix = create_matrix(corpuslist)
     pred_svm = (clf_svm.predict(inputmatrix))

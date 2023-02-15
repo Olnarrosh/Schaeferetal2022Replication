@@ -1,4 +1,5 @@
-import preprocess, parse_cmv, parse_micro
+import parse_essay
+import preprocess, parse_cmv, parse_micro, parse_essay
 import random
 import pickle
 # get all tuple lists from the 5 corpora
@@ -28,7 +29,7 @@ def get_corpus_ready(corpus: str):
         case "cmv":
             loadedcorpus = parse_cmv.parse_cmv_corpus()
         case "essay":
-            loadedcorpus = [] # TODO parse_essay()
+            loadedcorpus = parse_essay.parse_essay_corpus()
         case "usdeb":
             loadedcorpus = [] # TODO parse_usdeb()
         case "mardy":
@@ -49,7 +50,7 @@ def get_corpus_ready(corpus: str):
         pickle.dump(validate, file_val)
 
 # functionally equivalent to get_usdeb_ready(), but should work for all corpora
-def get_leave_one_out(leave_out:str, corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
+def get_leave_one_out(leave_out:str, corpora=["cmv", "essay", "micro"]):
     # corpora == list with names of all corpora ( == ["cmv", "essay", "mardy", "micro", "usdeb"])
     merged = []
     for corpus in corpora:
@@ -205,9 +206,9 @@ def create_gold_list(corpus:str):
 
 if __name__ == "__main__":
 
-    get_corpus_ready("micro")
+    #get_corpus_ready("micro")
 
-    create_gold_list("micro")
+    create_gold_list("cmv")
     with open("gold_cmv_list.pkl", "rb") as a:
         gold_list = pickle.load(a)
         print(gold_list)

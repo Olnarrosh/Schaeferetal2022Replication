@@ -10,11 +10,11 @@ import pickle
 # only change parameters for corpus and model
 # 20 trainobjects
 
-def train_model(corpus: str, model):
+def train_model(corpus: str, model: str):
     # add matrix and vecotr
     # switch case for 4 models
     match model:
-        case "PyTorch":
+        case "pytorch":
             # open pickle file with data
             with open(f"train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
@@ -23,7 +23,7 @@ def train_model(corpus: str, model):
 
             torch.save(pytorch_model, "pytorch_model.pt")
 
-        case "LogisticRegression":
+        case "lr":
             # open pickle file with data
             with open(f"train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
@@ -33,7 +33,7 @@ def train_model(corpus: str, model):
             filename = "lr_model.sav"
             pickle.dump(trained_lr, open(filename, "wb"))
 
-        case "RandomForest":
+        case "rf":
             # open pickle file with data
             with open(f"train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
@@ -43,7 +43,7 @@ def train_model(corpus: str, model):
             filename = "rf_model.sav"
             pickle.dump(trained_rf, open(filename, "wb"))
 
-        case "SVM":
+        case "svm":
             # open pickle file with data
             with open(f"train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
@@ -54,13 +54,13 @@ def train_model(corpus: str, model):
             pickle.dump(trained_svm, open(filename, "wb"))
 
 
-def eval_model(model: str, corpus: str):
+def eval_model(corpus: str, model: str, ):
     # open validation portion of corpus
     with open(f"val_{corpus}_file.pkl", "rb") as file:
         val_list = pickle.load(file)
 
     # open gold list of corpus
-    with open(f"gold_{corpus}_list.pkl") as gold:
+    with open(f"gold_{corpus}_list.pkl", "rb") as gold:
         gold_list = pickle.load(gold)
 
     # load models and get prediction lists
@@ -74,13 +74,13 @@ def eval_model(model: str, corpus: str):
         loaded_model = pickle.load(open(f"{model}_model.sav", 'rb'))
 
         match model:
-            case "LogisticRegression":
+            case "lr":
                 # evaluate
                 predlist = sklearnfile.predict_lr(loaded_model, val_list)
-            case "RandomForest":
+            case "rf":
                 # evaluate
                 predlist = sklearnfile.predict_rf(loaded_model, val_list)
-            case "SVM":
+            case "svm":
                 # evaluate
                 predlist = sklearnfile.predict_svm(loaded_model, val_list)
 
@@ -90,4 +90,5 @@ def eval_model(model: str, corpus: str):
 
 
 if __name__ == "__main__":
-    pass
+    train_model("cmv", "svm")
+    eval_model("cmv", "svm")
