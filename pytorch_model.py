@@ -102,13 +102,16 @@ def test(dataloader, model, loss_fn, device):
     print(f"correct: {correct}\ntest_correct: {test_correct}\npred: {pred}\npreds: {preds}\npred_list: {pred_list}\ncounter: {counter}\n")
 
 
-def make_predictions(dataloader, model, device):
+def make_predictions(data_list, model, device="cpu"):
+    data_dataset = CustomEmbeddingDataset(data_list)
+    data_dataloader = DataLoader(data_dataset, batch_size=1, shuffle=False)
+    
     pred_list = []
-    size = len(dataloader.dataset)
+    size = len(data_dataloader.dataset)
     model.eval()
     correct, test_correct, counter = 0, 0, 0
     with torch.no_grad():
-        for X, y in dataloader:
+        for X, y in data_dataloader:
             print(f"this is iteration number: {counter}")
             X = X.to(torch.float)
             y = y.to(torch.float)
