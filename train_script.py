@@ -69,6 +69,7 @@ def eval_model(corpus: str, model: str, ):
     if model == "pytorch":
         loaded_model = torch.load("pytorch_model.pt")
         loaded_model.eval()
+        predlist = mod.make_predictions(val_list, loaded_model)
         #predlist = fehlt noch
     else:
         loaded_model = pickle.load(open(f"{model}_model.sav", 'rb'))
@@ -90,5 +91,5 @@ def eval_model(corpus: str, model: str, ):
 
 
 if __name__ == "__main__":
-    train_model("cmv", "svm")
-    eval_model("cmv", "svm")
+    train_model("micro", "pytorch")
+    eval_model("cmv", "pytorch")
