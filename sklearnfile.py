@@ -2,13 +2,8 @@
 @Author Tana Deeg
 """
 import sklearn
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn import svm
-from sklearn.metrics import recall_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import f1_score
-from sklearn.metrics import accuracy_score
+from sklearn.linear_model import LogisticRegression, RandomForestClassifier, svm
+from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score
 import numpy as np
 import preprocess
 import parse_cmv
@@ -53,10 +48,6 @@ def predict_lr(clf_lr, corpuslist):
 
 
 
-
-
-
-
 #trains a classifier using a random forest classifier
 #input: corpuslist of format [(str, embedding, bool),...]
 def train_rf(corpuslist):
@@ -73,11 +64,6 @@ def predict_rf(rf_mlp, corpuslist):
 
 
 
-
-
-
-
-
 #trains a classifier using a support vector machine
 #input: corpuslist of format [(str, embedding, bool),...]
 def train_svm(corpuslist):
@@ -91,11 +77,6 @@ def predict_svm(clf_svm, corpuslist):
     inputmatrix = create_matrix(corpuslist)
     pred_svm = (clf_svm.predict(inputmatrix))
     return pred_svm
-
-
-
-
-
 
 
 

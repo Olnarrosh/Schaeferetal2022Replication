@@ -8,10 +8,8 @@ import pickle
 
 # script to run train and evaluation pipeline
 # only change parameters for corpus and model
-# 20 trainobjects
 # input: corpus str must be either "corpus" or "without_corpus" (for leave-one-out approach)
 def train_model(corpus: str, model: str):
-    # add matrix and vecotr
     # switch case for 4 models
     match model:
         case "pytorch":
@@ -64,16 +62,12 @@ def eval_model(corpus: str, model: str, ):
         gold_list = pickle.load(gold)
 
     # load models and get prediction lists
-    # TODO -> get prediction list for pytorch
-
     if model == "pytorch":
         loaded_model = torch.load("pytorch_model.pt")
         loaded_model.eval()
         predlist = mod.make_predictions(val_list, loaded_model)
-        #predlist = fehlt noch
     else:
         loaded_model = pickle.load(open(f"{model}_model.sav", 'rb'))
-
         match model:
             case "lr":
                 # evaluate
