@@ -1,8 +1,10 @@
+
 import pandas as pd
 from pathlib import Path
 
 
-def csv_Reader():
+
+def parse_usdeb_corpus():
     """
     created w.r.t the USDEB-Data
     reads the csv-file and returns a List of Tuples containing the String-Sentence and its Classification for Claims
@@ -15,3 +17,6 @@ def csv_Reader():
         tuples_list.append((file.loc[i, 'Speech'], file.loc[i, 'MainTag'] in ('Claim', 'Mixed')))
 
     return tuples_list
+
+
+
