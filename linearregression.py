@@ -13,7 +13,7 @@ from sklearn.linear_model import LinearRegression
 # Anzahl Listen = Anzahl Experimente: 5 + 20 + 5 = 30
 if __name__ == "__main__":
                     # 5 in domain
-                    # TODO: alle leave one out, alle spearman mit mardy, alle korpusgröße mardy, claimverhältnisse mardy
+                    # TODO: alle leave one out, alle spearman mit mardy, alle korpusgröße mardy, alle claimverhältnisse mardy
     X = np.array([[1, 29621, 0.481, 0.481, 1, 0, 0, 0, 0],
                   [1, 965, 0.035, 0.035, 0, 1, 0, 0, 0],
                   [1, 1665, 0.305, 0.305, 0, 0, 1, 0, 0],
