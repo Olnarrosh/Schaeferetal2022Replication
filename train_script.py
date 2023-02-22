@@ -17,60 +17,60 @@ def train_model(corpus: str, model: str):
     match model:
         case "pytorch":
             # open pickle file with data
-            with open(f"train_{corpus}_file.pkl", "rb") as file:
+            with open(f"./processed_data_results/train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
 
             pytorch_model = mod.train_model(train_list)
 
-            torch.save(pytorch_model, "pytorch_model.pt")
+            torch.save(pytorch_model, "./processed_data_results/pytorch_model.pt")
 
         case "lr":
             # open pickle file with data
-            with open(f"train_{corpus}_file.pkl", "rb") as file:
+            with open(f"./processed_data_results/train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
             # train model
             trained_lr = sklearnfile.train_lr(train_list)
             # save trained model as pickle
-            filename = "lr_model.sav"
+            filename = "./processed_data_results/lr_model.sav"
             pickle.dump(trained_lr, open(filename, "wb"))
 
         case "rf":
             # open pickle file with data
-            with open(f"train_{corpus}_file.pkl", "rb") as file:
+            with open(f"./processed_data_results/train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
             # train model
             trained_rf = sklearnfile.train_rf(train_list)
             # save trained model as pickle
-            filename = "rf_model.sav"
+            filename = "./processed_data_results/rf_model.sav"
             pickle.dump(trained_rf, open(filename, "wb"))
 
         case "svm":
             # open pickle file with data
-            with open(f"train_{corpus}_file.pkl", "rb") as file:
+            with open(f"./processed_data_results/train_{corpus}_file.pkl", "rb") as file:
                 train_list = pickle.load(file)
             # train model
             trained_svm = sklearnfile.train_svm(train_list)
             # save trained model as pickle
-            filename = "svm_model.sav"
+            filename = "./processed_data_results/svm_model.sav"
             pickle.dump(trained_svm, open(filename, "wb"))
 
 
 def eval_model(corpus: str, model: str, ):
     # open validation portion of corpus
-    with open(f"val_{corpus}_file.pkl", "rb") as file:
+    with open(f"./processed_data_results/val_{corpus}_file.pkl", "rb") as file:
         val_list = pickle.load(file)
 
     # open gold list of corpus
-    with open(f"gold_{corpus}_list.pkl", "rb") as gold:
+    with open(f"./processed_data_results/gold_{corpus}_list.pkl", "rb") as gold:
         gold_list = pickle.load(gold)
 
     # load models and get prediction lists
     if model == "pytorch":
-        loaded_model = torch.load("pytorch_model.pt")
+        loaded_model = torch.load("./processed_data_results/pytorch_model.pt")
         loaded_model.eval()
         predlist = mod.make_predictions(val_list, loaded_model)
     else:
-        loaded_model = pickle.load(open(f"{model}_model.sav", 'rb'))
+        loaded_model = pickle.load(open(f"./processed_data_results/{model}_model.sav", 'rb'))
         match model:
             case "lr":
                 # evaluate
@@ -91,7 +91,7 @@ def eval_model(corpus: str, model: str, ):
         "accuracy": accuracy
         }
     print(f"Precision: {precision}, Recall: {recall}, F-Score: {f1_score}, Accuracy: {accuracy}")
-    with open(f"{corpus}_{model}_evaluation.pkl", "wb") as file:
+    with open(f"./processed_data_results/{corpus}_{model}_evaluation.pkl", "wb") as file:
         pickle.dump(eval_dict, file)
 # TODO print out / save Evaluation results
 
