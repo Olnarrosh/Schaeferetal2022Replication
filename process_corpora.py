@@ -63,8 +63,11 @@ def create_gold_list(corpus:str):
 def process_all_corpora(corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
     for corpus in corpora:
         get_corpus_ready(corpus)
-        get_leave_one_out(corpus, corpora)
         create_gold_list(corpus)
+    """ # TODO only works when mardy parser works
+    for corpus in corpora:
+        get_leave_one_out(corpus, corpora)
+    """
 
 def claimcounter():
     microcount = 0
@@ -74,8 +77,46 @@ def claimcounter():
             microcount += 1
     print(microcount)
 
+
+
+
 if __name__ == "__main__":
 
-    #process_all_corpora()
-    claimcounter()
+    # process_all_corpora(corpora=["cmv", "essay", "micro", "usdeb"])
 
+    subset_1 = []
+    subset_2 = []
+    subset_3 = []
+    subset_4 = []
+    for corpus in ["cmv", "essay", "micro"]:
+        match corpus:
+            case "cmv":
+                cmv_corpus = parse_cmv.parse_cmv_corpus()
+            case "essay":
+                essay_corpus = parse_essay.parse_essay_corpus()
+            case "usdeb":
+                usdeb_corpus = parse_usdeb.parse_usdeb_corpus()
+            case "mardy":
+                mardy_corpus = parse_mardy.parse_mardy_corpus()
+            case "micro":
+                micro_corpus = parse_micro.parse_micro_corpus()
+    
+    subset_1.append(cmv_corpus)
+    subset_1.append(essay_corpus)
+    print(f"cmv and essay")
+    print(preprocess.compute_similarity(subset_1))
+    
+    subset_2.append(cmv_corpus)
+    subset_2.append(micro_corpus)
+    print(f"cmv and micro")
+    print(preprocess.compute_similarity(subset_2))
+    
+    subset_3.append(micro_corpus)
+    subset_3.append(essay_corpus)
+    print(f"micro and essay")
+    print(preprocess.compute_similarity(subset_3))
+    
+    subset_4.append(micro_corpus)
+    subset_4.append(micro_corpus)
+    print(f"micro and micro")
+    print(preprocess.compute_similarity(subset_4))
