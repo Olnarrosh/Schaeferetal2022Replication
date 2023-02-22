@@ -66,12 +66,9 @@ def process_all_corpora(corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
         get_leave_one_out(corpus, corpora)
         create_gold_list(corpus)
 
-def claimcounter():
-    cmvcount = 0
-    cmv = preprocess.convert_corpus(parse_cmv.parse_cmv_corpus())
-    for i in cmv:
-        if i[2] == 1:
-            cmvcount += 1
-    print(cmvcount)
 
 if __name__ == "__main__":
+
+    process_all_corpora()
+
+
