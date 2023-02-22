@@ -63,8 +63,9 @@ def create_gold_list(corpus:str):
 def process_all_corpora(corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
     for corpus in corpora:
         get_corpus_ready(corpus)
-        get_leave_one_out(corpus, corpora)
         create_gold_list(corpus)
+    for corpus in corpora:
+        get_leave_one_out(corpus, corpora)
 
 
 if __name__ == "__main__":
