@@ -66,9 +66,16 @@ def process_all_corpora(corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
         get_leave_one_out(corpus, corpora)
         create_gold_list(corpus)
 
+def claimcounter():
+    microcount = 0
+    micro  = preprocess.convert_corpus(parse_usdeb.parse_usdeb_corpus())
+    for i in micro:
+        if i[2] == 1:
+            microcount += 1
+    print(microcount)
 
 if __name__ == "__main__":
 
-    process_all_corpora()
-
+    #process_all_corpora()
+    claimcounter()
 
