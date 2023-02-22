@@ -64,12 +64,14 @@ def process_all_corpora(corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
     for corpus in corpora:
         get_corpus_ready(corpus)
         create_gold_list(corpus)
+    """ # TODO only works when mardy parser works
     for corpus in corpora:
         get_leave_one_out(corpus, corpora)
+    """
 
 
 if __name__ == "__main__":
 
-    process_all_corpora()
+    process_all_corpora(corpora=["cmv", "essay", "micro", "usdeb"])
 
 
