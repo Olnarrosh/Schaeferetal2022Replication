@@ -1,0 +1,16 @@
+processed_data_results/train_usdeb_file.pkl
+gold_cmv_list.pkl
+gold_essay_list.pkl
+gold_micro_list.pkl
+train_cmv_file.pkl
+train_essay_file.pkl
+train_micro_file.pkl
+val_cmv_file.pkl
+val_micro_file.pkl
+val_essay_file.pkl
+__pycache__/parse_cmv.cpython-310.pyc
+__pycache__/parse_essay.cpython-310.pyc
+__pycache__/parse_micro.cpython-310.pyc
+__pycache__/parse_mardy.cpython-310.pyc
+__pycache__/parse_usdeb.cpython-310.pyc
+__pycache__/preprocess.cpython-310.pyc
