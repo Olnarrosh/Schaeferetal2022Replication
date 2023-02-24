@@ -3,6 +3,7 @@ import numpy as np
 from itertools import product, permutations
 from preprocess import compute_similarity, tokenize
 from sklearn.linear_model import LinearRegression
+from math import log
 import parse_cmv, parse_essay, parse_mardy, parse_micro, parse_usdeb
 
 
@@ -19,7 +20,7 @@ def regression(corpora: dict[str: list[float]], scores: dict[str: float]):
     
     print("now computes similaritys")
     # compute similarity, corpus size, and claim ratio
-    sim = {cc: compute_similarity([corpora[c] for c in cc]) for cc in corp_combos}
+    sim = {cc: 1 if cc[0] == cc[1] else compute_similarity([corpora[c] for c in cc]) for cc in corp_combos}
     print("done with similaritys")
     size = {c: len(corpora[c]) for c in corpora}
     claim_ratio = {c: len([s for s in corpora[c] if s[1]])/size[c] for c in corpora}
@@ -34,7 +35,7 @@ def regression(corpora: dict[str: list[float]], scores: dict[str: float]):
                 order = cc[0]
             else:
                 continue
-        iv_vals = [sim[cc], size[cc[0]], claim_ratio[cc[0]], claim_ratio[cc[1]]]
+        iv_vals = [sim[cc], log(size[cc[0]]), claim_ratio[cc[0]], claim_ratio[cc[1]]]
         iv_vals += [1 if i == corpus.index(cc[0]) else 0 for i in range(len(corpus))]
         indep_vars.append(iv_vals)
         dep_vars.append(scores[order])
@@ -45,10 +46,13 @@ def regression(corpora: dict[str: list[float]], scores: dict[str: float]):
         order = _get_contained_ordering_(other, scores.keys())
         if not order:
             continue
-        iv_vals = [compute_similarity(other),
-                   sum(size[o] for o in other),
-                   sum(len([s for s in corpora[o] if s[1] for o in other])) / sum(size(o) for o in other),
-                   ratio[c]]
+        other_combos = product(other, other)
+        other_combos = set(tuple(sorted(x)) for x in other_combos if x[0] != x[1])
+        print(other_combos)
+        iv_vals = [sum(sim[o] for o in other_combos) / len(other),
+                   sum(log(size[o]) for o in other),
+                   sum(len([s for s in corpora[o] if s[1]]) for o in other) / sum(size[o] for o in other),
+                   claim_ratio[c]]
         iv_vals += [0 if i == corpus.index(c) else 1 for i in range(len(corpus))]
         indep_vars.append(iv_vals)
         dep_vars.append(scores[order])
@@ -72,17 +76,13 @@ def _get_contained_ordering_(permutable, container):
 # spearman: cmv essay 0.209, cmv micro 0.249, micro essay 0.302, usdeb cmv 0.211, usdeb essay 0.281, usdeb micro 0.206
 # Anzahl Listen = Anzahl Experimente: 5 + 20 + 5 = 30
 if __name__ == "__main__":
-    mardy = parse_mardy.parse_mardy_corpus()
-    sub_mardy = []
-    for el in mardy:
-        sub_mardy.extend(el)
 
     corpora_dict = {
     "cmv": [tokenize(sent) for sent in parse_cmv.parse_cmv_corpus()],
     "usdeb":[tokenize(sent) for sent in parse_usdeb.parse_usdeb_corpus()],
     "micro":[tokenize(sent) for sent in parse_micro.parse_micro_corpus()],
     "essay":[tokenize(sent) for sent in parse_essay.parse_essay_corpus()],
-    "mardy":[tokenize(sent) for sent in sub_mardy]
+    "mardy":[tokenize(sent) for sent in parse_mardy.parse_mardy_corpus()]
     }
 
     print("now at scores dict")
