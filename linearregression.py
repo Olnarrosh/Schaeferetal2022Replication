@@ -1,10 +1,47 @@
 
 import numpy as np
 from itertools import product, permutations
-from preprocess import compute_similarity
+from preprocess import compute_similarity, tokenize
 from sklearn.linear_model import LinearRegression
+import parse_cmv, parse_essay, parse_mardy, parse_micro, parse_usdeb
 
 
+
+corpora_dict = {
+    "cmv": [sent.tokenize() for sent in parse_cmv],
+    "usdeb":[sent.tokenize() for sent in parse_usdeb],
+    "micro":[sent.tokenize() for sent in parse_micro],
+    "essay":[sent.tokenize() for sent in parse_essay],
+    "mardy":[sent.tokenize() for sent in [el for el in parse_mardy]]
+    }
+
+scores_dict = {
+    ("cmv", "cmv"):
+    ("cmv", "usdeb"):
+    ("cmv", "micro"):
+    ("cmv", "essay"):
+    ("cmv", "mardy"):
+    ("usdeb", "cmv"):
+    ("usdeb", "usdeb"):
+	("usdeb", "micro"):
+    ("usdeb", "essay"):
+    ("usdeb", "mardy"):
+    ("micro", "cmv"):
+    ("micro", "usdeb"):
+    ("micro", "micro"):
+    ("micro", "essay"):
+    ("micro", "mardy"):
+    ("essay", "cmv"):
+    ("essay", "usdeb"):
+    ("essay", "micro"):
+    ("essay", "essay"):
+    ("essay", "mardy"):
+    ("mardy", "cmv"):
+    ("mardy", "usdeb"):
+    ("mardy", "micro"):
+    ("mardy", "essay"):
+    ("mardy", "mardy"):
+    }
 # takes two dicts as input, the first with corpus names (should be "cmv",
 # "usdeb", "essay", "mardy", "micro") as keys and the tokenized sentences
 # (use the tokenize function from preprocess) as values, the second with
