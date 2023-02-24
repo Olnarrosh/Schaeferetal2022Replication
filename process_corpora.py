@@ -35,7 +35,7 @@ def get_corpus_ready(corpus: str):
     with open(f"./processed_data_results/val_{corpus}_file.pkl", "wb") as file_val:
         pickle.dump(validate, file_val)
 
-# functionally equivalent to get_usdeb_ready(), but should work for all corpora
+# prepare all 5 leave one out approaches by merging four 90% splits
 def get_leave_one_out(leave_out:str, corpora=["cmv", "essay", "micro"]):
     # corpora == list with names of all corpora ( == ["cmv", "essay", "mardy", "micro", "usdeb"])
     merged = []
