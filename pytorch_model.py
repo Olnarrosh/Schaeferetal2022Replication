@@ -7,7 +7,7 @@ from custom_dataset_pytorch import CustomEmbeddingDataset
 from torch import nn
 from sklearn.metrics import f1_score
 
-# dummy-Datensatz for testing purposes
+# dummy-Data for testing purposes
 
 data_train = [
     ["Das ist ein Test Satz", [1.0, 2.0, 0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], 1.0],
@@ -66,7 +66,6 @@ def train(dataloader, model, loss_fn, optimizer, device):
         X, y = X.to(device), y.to(device)
 
         # Compute prediction error
-
         pred = model(X)
         loss = loss_fn(pred, target_y)
 
