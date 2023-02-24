@@ -7,41 +7,7 @@ import parse_cmv, parse_essay, parse_mardy, parse_micro, parse_usdeb
 
 
 
-corpora_dict = {
-    "cmv": [sent.tokenize() for sent in parse_cmv],
-    "usdeb":[sent.tokenize() for sent in parse_usdeb],
-    "micro":[sent.tokenize() for sent in parse_micro],
-    "essay":[sent.tokenize() for sent in parse_essay],
-    "mardy":[sent.tokenize() for sent in [el for el in parse_mardy]]
-    }
 
-scores_dict = {
-    ("cmv", "cmv"):
-    ("cmv", "usdeb"):
-    ("cmv", "micro"):
-    ("cmv", "essay"):
-    ("cmv", "mardy"):
-    ("usdeb", "cmv"):
-    ("usdeb", "usdeb"):
-	("usdeb", "micro"):
-    ("usdeb", "essay"):
-    ("usdeb", "mardy"):
-    ("micro", "cmv"):
-    ("micro", "usdeb"):
-    ("micro", "micro"):
-    ("micro", "essay"):
-    ("micro", "mardy"):
-    ("essay", "cmv"):
-    ("essay", "usdeb"):
-    ("essay", "micro"):
-    ("essay", "essay"):
-    ("essay", "mardy"):
-    ("mardy", "cmv"):
-    ("mardy", "usdeb"):
-    ("mardy", "micro"):
-    ("mardy", "essay"):
-    ("mardy", "mardy"):
-    }
 # takes two dicts as input, the first with corpus names (should be "cmv",
 # "usdeb", "essay", "mardy", "micro") as keys and the tokenized sentences
 # (use the tokenize function from preprocess) as values, the second with
@@ -50,6 +16,7 @@ def regression(corpora: dict[str: list[float]], scores: dict[str: float]):
     # compute all combinations of corpora (order doesn't matter)
     corp_combos = product(corpora.keys(), corpora.keys())
     corp_combos = set(tuple(sorted(x)) for x in corp_combos)
+    
     # compute similarity, corpus size, and claim ratio
     sim = {cc: compute_similarity([corpora[c] for c in cc]) for cc in corp_combos}
     size = {c: len(corpora[c]) for c in corpora}
@@ -102,6 +69,50 @@ def _get_contained_ordering_(permutable, container):
 # spearman: cmv essay 0.209, cmv micro 0.249, micro essay 0.302, usdeb cmv 0.211, usdeb essay 0.281, usdeb micro 0.206
 # Anzahl Listen = Anzahl Experimente: 5 + 20 + 5 = 30
 if __name__ == "__main__":
+    corpora_dict = {
+    "cmv": [sent.tokenize() for sent in parse_cmv],
+    "usdeb":[sent.tokenize() for sent in parse_usdeb],
+    "micro":[sent.tokenize() for sent in parse_micro],
+    "essay":[sent.tokenize() for sent in parse_essay],
+    "mardy":[sent.tokenize() for sent in [el for el in parse_mardy]]
+    }
+
+    scores_dict = {
+        ("cmv", "cmv"): 0.627,
+        ("cmv", "usdeb"): 0.427,
+        ("cmv", "micro"): 0.091,
+        ("cmv", "essay"): 0.288,
+        ("cmv", "mardy"): # TODO
+        ("usdeb", "cmv"): 0.532,
+        ("usdeb", "usdeb"): 0.694,
+        ("usdeb", "micro"): 0.157,
+        ("usdeb", "essay"): 0.551,
+        ("usdeb", "mardy"): # TODO
+        ("micro", "cmv"): 0.661,
+        ("micro", "usdeb"): 0.001,
+        ("micro", "micro"): 0.0,
+        ("micro", "essay"): 0.0,
+        ("micro", "mardy"): # TODO
+        ("essay", "cmv"): 0.345,
+        ("essay", "usdeb"): 0.254,
+        ("essay", "micro"): 0.190,
+        ("essay", "essay"): 0.467,
+        ("essay", "mardy"): # TODO
+        ("mardy", "cmv"): #TODO
+        ("mardy", "usdeb"): # TODO
+        ("mardy", "micro"): # TODO
+        ("mardy", "essay"): # TODO
+        ("mardy", "mardy"): # TODO
+        ("cmv", "usdeb", "micro", "essay"): # TODO
+        ("cmv", "usdeb", "micro", "mardy"): # TODO
+        ("cmv", "usdeb", "essay", "mardy"): # TODO
+        ("cmv", "micro", "essay", "mardy"): # TODO
+        ("usdeb", "micro", "essay", "mardy"): # TODO
+        }
+
+    regression(corpora_dict, scores_dict)
+    
+    """
                     # 5 in domain
                     # TODO: alle leave one out, alle spearman mit mardy, alle korpusgröße mardy, alle claimverhältnisse mardy
     X = np.array([[1, 29621, 0.481, 0.481, 1, 0, 0, 0, 0],
@@ -144,4 +155,5 @@ if __name__ == "__main__":
     reg = LinearRegression().fit(X, y)
     # prints all weights -> see which independent variables are most important!!
     print(reg.coef_)
+    """
 
