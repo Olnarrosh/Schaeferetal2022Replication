@@ -2,7 +2,10 @@ from pathlib import Path
 from json import load
 
 def parse_mardy_corpus():
-    return [parse_mardy_file(str(f)) for f in Path("./data/mardy").iterdir()]
+    corpus = []
+    for f in Path("./data/mardy").iterdir():
+        corpus += parse_mardy_file(str(f))
+    return corpus
 
 def parse_mardy_file(filename):
     with open(filename, encoding="utf-8") as file:
