@@ -75,7 +75,7 @@ if __name__ == "__main__":
     "mardy":[tokenize(sent) for sent in parse_mardy.parse_mardy_corpus()]
     }
 
-    # f-score results from Linear Regression Model
+    # f-score results from Logistic Regression Model
     scores_dict = {
         ("cmv", "cmv"): 0.627,
         ("cmv", "usdeb"): 0.427,
