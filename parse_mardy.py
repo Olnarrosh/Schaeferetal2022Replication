@@ -5,12 +5,7 @@ def parse_mardy_corpus():
     tuple_list = []
 
     for sent, claim in zip(mardy["Sentence"], mardy["Overlaped_claim_ids"]):
-        if isinstance(claim, int):
-            class_claim = True
-        else:
-            class_claim = False
-        tuple = (sent, class_claim)
-        tuple_list.append(tuple)
+        tuple_list.append((sent, isinstance(claim, str)))
 
     return tuple_list
 
