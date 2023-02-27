@@ -1,9 +1,24 @@
-from pathlib import Path
-from json import load
+import pandas as pd
 
 def parse_mardy_corpus():
+    mardy = pd.read_csv("data/mardy/entire_debatenet.csv")
+    tuple_list = []
+
+    for sent, claim in zip(mardy["Sentence"], mardy["Overlaped_claim_ids"]):
+        if isinstance(claim, int):
+            class_claim = True
+        else:
+            class_claim = False
+        tuple = (sent, class_claim)
+        tuple_list.append(tuple)
+
+    return tuple_list
+
+
+"""
+def parse_mardy_corpus():
     corpus = []
-    for f in Path("./data/mardy").iterdir():
+    for f in Path("data/mardy_old").iterdir():
         corpus += parse_mardy_file(str(f))
     return corpus
 
@@ -19,3 +34,4 @@ def parse_mardy_file(filename):
         is_claim = any(c[0] <= end and c[1] >= begin for c in claims)
         sentences.append((data["text"][begin:end], is_claim))
     return sentences
+"""

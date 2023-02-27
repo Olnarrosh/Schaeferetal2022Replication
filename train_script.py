@@ -96,4 +96,47 @@ def eval_model(corpus: str, model: str, ):
 
 
 if __name__ == "__main__":
-    pass
+
+    models = ["pytorch", "lr", "rf", "svm"]
+    # without_corpus only gets used for the train method it will be evaluated with the corresponding corpus
+    train_corpora = ["without_usdeb", "without_micro", "without_essay", "without_cmv", "without_mardy"]
+    single_corpora = ["usdeb", "micro", "essay", "cmv", "mardy_old"] # for test and validation # also for single corpora
+    pair_corpora = [("cmv", "usdeb"), ("cmv", "micro"), ("cmv", "essay"), ("cmv", "mardy_old"),
+                     ("usdeb", "cmv"), ("usdeb", "micro"), ("usdeb", "essay"), ("usdeb", "mardy_old"),
+                     ("micro", "cmv"), ("micro", "usdeb"), ("micro", "essay"), ("micro", "mardy_old"),
+                     ("essay", "cmv"), ("essay", "usdeb"), ("essay", "micro"), ("essay", "mardy_old"),
+                     ("mardy_old", "cmv"), ("mardy_old", "usdeb"), ("mardy_old", "micro"), ("mardy_old", "essay")]
+
+
+    print("eval single corpora for in-domain")
+    for corpus in single_corpora:
+        for model in models:
+            print( f"trained with: {corpus} on {model}")
+            train_model(corpus,model)
+            print(f"evaluated with: {corpus} on {model}")
+            eval_model(corpus,model)
+    print("#"*75)
+    print("\n")
+    print("\n")
+    print("eval pairwise corpora for cross-domain")
+    #jeder mit jedem
+    for pair in pair_corpora:
+        print(f"trained with: {pair[0]} on {model}")
+        train_model(pair[0], model)
+        print(f"evaluated with: {pair[1]} on {model}")
+        eval_model(pair[1],model)
+    print("#"*75)
+    print("\n")
+    print("\n")
+    print("eval leave-one-out corpora for cross-domain")
+    for count in range(len(train_corpora)):
+        for model in models:
+            print( f"trained with: {train_corpora[count]} on {model}")
+            train_model(train_corpora[count], model)
+            print(f"evaluated with: {single_corpora[count]} on {model}")
+            eval_model(single_corpora[count],model)
+
+
+
+
+

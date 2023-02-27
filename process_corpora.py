@@ -1,7 +1,6 @@
 """
 @Author Tana Deeg and Sandro Weick
 """
-import parse_essay
 import preprocess, parse_cmv, parse_micro, parse_essay , parse_usdeb, parse_mardy
 import random
 import pickle
@@ -16,7 +15,7 @@ def get_corpus_ready(corpus: str):
             loadedcorpus = parse_cmv.parse_cmv_corpus()
         case "essay":
             loadedcorpus = parse_essay.parse_essay_corpus()
-        case "usdeb":
+        case "usdeb":      
             loadedcorpus = parse_usdeb.parse_usdeb_corpus()
         case "mardy":
             loadedcorpus = parse_mardy.parse_mardy_corpus()
@@ -36,7 +35,7 @@ def get_corpus_ready(corpus: str):
         pickle.dump(validate, file_val)
 
 # prepare all 5 leave one out approaches by merging four 90% splits
-def get_leave_one_out(leave_out:str, corpora=["cmv", "essay", "micro"]):
+def get_leave_one_out(leave_out:str, corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
     # corpora == list with names of all corpora ( == ["cmv", "essay", "mardy", "micro", "usdeb"])
     merged = []
     for corpus in corpora:
@@ -64,11 +63,11 @@ def process_all_corpora(corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
     for corpus in corpora:
         get_corpus_ready(corpus)
         create_gold_list(corpus)
-    """ # TODO only works when mardy parser works
+    """ # TODO only works when mardy parser works"""
     for corpus in corpora:
         get_leave_one_out(corpus, corpora)
-    """
 
+# only for usdeb?
 def claimcounter():
     microcount = 0
     micro  = preprocess.convert_corpus(parse_usdeb.parse_usdeb_corpus())
@@ -82,7 +81,7 @@ def claimcounter():
 
 if __name__ == "__main__":
 
-    # process_all_corpora(corpora=["cmv", "essay", "micro", "usdeb"])
+    process_all_corpora(corpora=["cmv", "essay", "micro", "usdeb", "mardy"])
     sub_all = []
     subset_1 = []
     subset_2 = []
@@ -91,7 +90,7 @@ if __name__ == "__main__":
     sub_5 = []
     sub_6 = []
     sub_7 = []
-    for corpus in ["cmv", "essay", "micro", "usdeb"]:
+    for corpus in ["cmv", "essay", "micro", "usdeb", "mardy"]:
         match corpus:
             case "cmv":
                 cmv_corpus = parse_cmv.parse_cmv_corpus()
@@ -110,22 +109,26 @@ if __name__ == "__main__":
     sub_all.append(usdeb_corpus)
     print(f"sim ohne mardy")
     print(preprocess.compute_similarity(sub_all))
-    
+
+    print(f"sim mit mardy")
+    sub_all.append(mardy_corpus)
+    print(preprocess.compute_similarity(sub_all))
+
     subset_1.append(cmv_corpus)
     subset_1.append(essay_corpus)
     print(f"cmv and essay")
     print(preprocess.compute_similarity(subset_1))
-    
+
     subset_2.append(cmv_corpus)
     subset_2.append(micro_corpus)
     print(f"cmv and micro")
     print(preprocess.compute_similarity(subset_2))
-    
+
     subset_3.append(micro_corpus)
     subset_3.append(essay_corpus)
     print(f"micro and essay")
     print(preprocess.compute_similarity(subset_3))
-    
+
     subset_4.append(micro_corpus)
     subset_4.append(micro_corpus)
     print(f"micro and micro")
@@ -146,4 +149,35 @@ if __name__ == "__main__":
     sub_7.append(micro_corpus)
     print(f"usdeb and micro")
     print(preprocess.compute_similarity(sub_7))
+
+    print("trying with mardy")
+    sub_8 =[]
+    sub_8.append(mardy_corpus)
+    sub_8.append(micro_corpus)
+    print(f"mardy and micro")
+    print(preprocess.compute_similarity(sub_8))
+
+    sub_9 = []
+    sub_9.append(mardy_corpus)
+    sub_9.append(usdeb_corpus)
+    print(f"mardy and usdeb")
+    print(preprocess.compute_similarity(sub_9))
+
+    sub_10 = []
+    sub_10.append(mardy_corpus)
+    sub_10.append(cmv_corpus)
+    print(f"mardy and cmv")
+    print(preprocess.compute_similarity(sub_10))
+
+    sub_11 = []
+    sub_11.append(mardy_corpus)
+    sub_11.append(essay_corpus)
+    print(f"mardy and essay")
+    print(preprocess.compute_similarity(sub_11))
+
+
+
+
+
+
 
