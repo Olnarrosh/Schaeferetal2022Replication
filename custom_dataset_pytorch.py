@@ -41,11 +41,3 @@ class CustomEmbeddingDataset(Dataset):
         label = self.emb_list[idx][2]
         return emb, label
 
-
-# little test main
-
-if __name__ == "__main__":
-    train_dataset = CustomEmbeddingDataset(data_train)
-    print(train_dataset.__getitem__(1))
-    print(train_dataset.__getitem__(2))
-    print(train_dataset.__getitem__(0))

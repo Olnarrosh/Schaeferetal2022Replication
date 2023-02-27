@@ -96,4 +96,5 @@ def eval_model(corpus: str, model: str, ):
 
 
 if __name__ == "__main__":
-    pass
+    train_model("micro", "svm")
+    eval_model("micro", "svm")
