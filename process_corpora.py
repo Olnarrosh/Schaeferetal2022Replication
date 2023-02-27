@@ -15,7 +15,7 @@ def get_corpus_ready(corpus: str):
             loadedcorpus = parse_cmv.parse_cmv_corpus()
         case "essay":
             loadedcorpus = parse_essay.parse_essay_corpus()
-        case "usdeb":      
+        case "usdeb":
             loadedcorpus = parse_usdeb.parse_usdeb_corpus()
         case "mardy":
             loadedcorpus = parse_mardy.parse_mardy_corpus()
@@ -25,9 +25,7 @@ def get_corpus_ready(corpus: str):
     finallist = preprocess.convert_corpus(loadedcorpus)
     random.shuffle(finallist)
     train = finallist[0:int(len(finallist)*0.9)]
-    print(len(train))
     validate = finallist[int(len(finallist)*0.9):]
-    print(len(validate))
 
     with open(f"./processed_data_results/train_{corpus}_file.pkl", "wb") as file_train:
         pickle.dump(train, file_train)
@@ -63,18 +61,8 @@ def process_all_corpora(corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
     for corpus in corpora:
         get_corpus_ready(corpus)
         create_gold_list(corpus)
-    """ # TODO only works when mardy parser works"""
     for corpus in corpora:
         get_leave_one_out(corpus, corpora)
-
-# only for usdeb?
-def claimcounter():
-    microcount = 0
-    micro  = preprocess.convert_corpus(parse_usdeb.parse_usdeb_corpus())
-    for i in micro:
-        if i[2] == 1:
-            microcount += 1
-    print(microcount)
 
 
 

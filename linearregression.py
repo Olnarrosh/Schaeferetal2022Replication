@@ -18,10 +18,8 @@ def regression(corpora: dict[str: list[float]], scores: dict[str: float]):
     corp_combos = product(corpora.keys(), corpora.keys())
     corp_combos = set(tuple(sorted(x)) for x in corp_combos)
     
-    print("now computes similaritys")
     # compute similarity, corpus size, and claim ratio
     sim = {cc: 1 if cc[0] == cc[1] else compute_similarity([corpora[c] for c in cc]) for cc in corp_combos}
-    print("done with similaritys")
     size = {c: len(corpora[c]) for c in corpora}
     claim_ratio = {c: len([s for s in corpora[c] if s[1]])/size[c] for c in corpora}
     corpus = list(corpora.keys()) # use list to ensure fixed order
@@ -40,7 +38,6 @@ def regression(corpora: dict[str: list[float]], scores: dict[str: float]):
         indep_vars.append(iv_vals)
         dep_vars.append(scores[order])
     # compute leave one out values
-    print("now at leave one out")
     for c in corpus:
         other = [x for x in corpus if c != x]
         order = _get_contained_ordering_(other, scores.keys())
@@ -67,14 +64,7 @@ def _get_contained_ordering_(permutable, container):
     return None
 
 
-#unabh. Variablen: spearman ähnlichkeit (3 kommastellen), Korpsugrößetraining(#Sätze), verhältnisclaimnichtclaimquell (anzahlclaims/anzahlsätzegesamt) auf 3 kommastellen, verhältnisclaimnichtclaimziel,
-# usdebtrain, microtrain, essaytrain, cmvtrain, mardytrain  (--> alle binary)
 
-# für leave one out: korpusgröße = summe aller größen, verhältnisclaims = summe aller claims / gesamtkorpusgröße
-
-# also Länge pro liste ist 9
-# spearman: cmv essay 0.209, cmv micro 0.249, micro essay 0.302, usdeb cmv 0.211, usdeb essay 0.281, usdeb micro 0.206
-# Anzahl Listen = Anzahl Experimente: 5 + 20 + 5 = 30
 if __name__ == "__main__":
 
     corpora_dict = {
@@ -85,9 +75,7 @@ if __name__ == "__main__":
     "mardy":[tokenize(sent) for sent in parse_mardy.parse_mardy_corpus()]
     }
 
-    print("now at scores dict")
-
-    # f-score results from Linear Regression Model
+    # f-score results from Logistic Regression Model
     scores_dict = {
         ("cmv", "cmv"): 0.627,
         ("cmv", "usdeb"): 0.427,
@@ -120,53 +108,7 @@ if __name__ == "__main__":
         ("cmv", "micro", "essay", "mardy"): 0.37,
         ("usdeb", "micro", "essay", "mardy"): 0.4
         }
-    
-    print("now at regression")
 
     print(regression(corpora_dict, scores_dict))
-    
-    """
-                    # 5 in domain
-                    # TODO: alle leave one out, alle spearman mit mardy, alle korpusgröße mardy, alle claimverhältnisse mardy
-    X = np.array([[1, 29621, 0.481, 0.481, 1, 0, 0, 0, 0],
-                  [1, 965, 0.035, 0.035, 0, 1, 0, 0, 0],
-                  [1, 1665, 0.305, 0.305, 0, 0, 1, 0, 0],
-                  [1, 2798, 0.366, 0.366, 0, 0, 0, 1, 0],
-                  [1, 0, 0, 0, 0, 0, 0, 0, 1],
-                  # 5 leave one out
-                  [0, 0, 0, 0, 0, 1, 1, 1, 1],
-                  [0, 0, 0, 0, 1, 0, 1, 1, 1],
-                  [0, 0, 0, 0, 1, 1, 0, 1, 1],
-                  [0, 0, 0, 0, 1, 1, 1, 0, 1],
-                  [0, 35049, 0.451, 0, 1, 1, 1, 1, 0],
-                  # 4 train usdeb
-                  [0.206, 29621, 0.481, 0.035, 1, 0, 0, 0, 0],
-                  [0.281, 29621, 0.481, 0.305, 1, 0, 0, 0, 0],
-                  [0.211, 29621, 0.481, 0.366, 1, 0, 0, 0, 0],
-                  [0, 29621, 0.481, 0, 1, 0, 0, 0, 0],
-                  #4 train micro
-                  [0.206, 965, 0.035, 0.481, 0, 1, 0, 0, 0],
-                  [0.302, 965, 0.035, 0.305, 0, 1, 0, 0, 0],
-                  [0.249, 965, 0.035, 0.366, 0, 1, 0, 0, 0],
-                  [0, 965, 0.035, 0, 0, 1, 0, 0, 0],
-                  # 4 train essay
-                  [0.281, 1665, 0.305, 0.481, 0, 0, 1, 0, 0],
-                  [0.302, 1665, 0.305, 0.035, 0, 0, 1, 0, 0],
-                  [0.209, 1665, 0.305, 0.366, 0, 0, 1, 0, 0],
-                  [0, 1665, 0.305, 0, 0, 0, 1, 0, 0],
-                  #4 train cmv
-                  [0.211, 2798, 0.366, 0.481, 0, 0, 0, 1, 0],
-                  [0.249, 2798, 0.366, 0.035, 0, 0, 0, 1, 0],
-                  [0.209, 2798, 0.366, 0.305, 0, 0, 0, 1, 0],
-                  [0, 2798, 0.366, 0, 0, 0, 0, 1, 0],
-                  # 4 train mardy
-                  [0, 0, 0, 0.481, 0, 0, 0, 0, 1],
-                  [0, 0, 0, 0.035, 0, 0, 0, 0, 1],
-                  [0, 0, 0, 0.305, 0, 0, 0, 0, 1],
-                  [0, 0, 0, 0.366, 0, 0, 0, 0, 1]])
-    y = [] #TODO insert all F-Scores, auf 3 kommastellen runden
-    reg = LinearRegression().fit(X, y)
-    # prints all weights -> see which independent variables are most important!!
-    print(reg.coef_)
-    """
+
 
