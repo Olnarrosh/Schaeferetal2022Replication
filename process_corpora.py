@@ -26,9 +26,7 @@ def get_corpus_ready(corpus: str):
     finallist = preprocess.convert_corpus(loadedcorpus)
     random.shuffle(finallist)
     train = finallist[0:int(len(finallist)*0.9)]
-    print(len(train))
     validate = finallist[int(len(finallist)*0.9):]
-    print(len(validate))
 
     with open(f"./processed_data_results/train_{corpus}_file.pkl", "wb") as file_train:
         pickle.dump(train, file_train)
@@ -68,16 +66,8 @@ def process_all_corpora(corpora=["cmv", "essay", "mardy", "micro", "usdeb"]):
         get_leave_one_out(corpus, corpora)
 
 
-def claimcounter():
-    microcount = 0
-    micro  = preprocess.convert_corpus(parse_usdeb.parse_usdeb_corpus())
-    for i in micro:
-        if i[2] == 1:
-            microcount += 1
-    print(microcount)
-
-
 
 
 if __name__ == "__main__":
     process_all_corpora()
+
