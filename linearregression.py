@@ -1,9 +1,10 @@
 
-import numpy as np
+import pandas as pd
 from itertools import product, permutations
 from preprocess import compute_similarity, tokenize
-from sklearn.linear_model import LinearRegression
+import statsmodels.api as sm
 from math import log
+from collections.abc import Iterable
 import parse_cmv, parse_essay, parse_mardy, parse_micro, parse_usdeb
 
 
@@ -35,8 +36,10 @@ def regression(corpora: dict[str: list[float]], scores: dict[str: float]):
                 continue
         iv_vals = [sim[cc], log(size[cc[0]]), claim_ratio[cc[0]], claim_ratio[cc[1]]]
         iv_vals += [1 if i == corpus.index(cc[0]) else 0 for i in range(len(corpus))]
-        indep_vars.append(iv_vals)
-        dep_vars.append(scores[order])
+        iv_vals.append(1)
+        for score in (scores[order] if isinstance(scores[order], Iterable) else [scores[order]]):
+            indep_vars.append(iv_vals)
+            dep_vars.append(score)
     # compute leave one out values
     for c in corpus:
         other = [x for x in corpus if c != x]
@@ -45,15 +48,18 @@ def regression(corpora: dict[str: list[float]], scores: dict[str: float]):
             continue
         other_combos = product(other, other)
         other_combos = set(tuple(sorted(x)) for x in other_combos if x[0] != x[1])
-        print(other_combos)
-        iv_vals = [sum(sim[o] for o in other_combos) / len(other),
+        iv_vals = [sum(sim.get(_get_contained_ordering_((c, o), sim), 0) for o in other_combos) / len(other),
                    sum(log(size[o]) for o in other),
                    sum(len([s for s in corpora[o] if s[1]]) for o in other) / sum(size[o] for o in other),
                    claim_ratio[c]]
         iv_vals += [0 if i == corpus.index(c) else 1 for i in range(len(corpus))]
-        indep_vars.append(iv_vals)
-        dep_vars.append(scores[order])
-    return LinearRegression().fit(np.array(indep_vars), np.array(dep_vars)).coef_
+        iv_vals.append(1)
+        for score in (scores[order] if isinstance(scores[order], Iterable) else [scores[order]]):
+            indep_vars.append(iv_vals)
+            dep_vars.append(score)
+    indep_vars = pd.DataFrame(indep_vars, columns=["similarity", "log(size)", "claim ratio (source)", "claim ratio (target)"] + corpus + ["(intercept)"])
+    dep_vars = pd.DataFrame(dep_vars)
+    return sm.OLS(dep_vars, indep_vars).fit()
             
 
 # helper function so tuples in scores keys can be in any order
@@ -77,24 +83,38 @@ if __name__ == "__main__":
 
     # f-score results from Logistic Regression Model
     scores_dict = {
-        ("cmv", "cmv"): 0.627,
+        ("cmv", "cmv"): [0.337, 0.667, 0.566, 0.648],
         ("cmv", "usdeb"): 0.427,
         ("cmv", "micro"): 0.091,
         ("cmv", "essay"): 0.288,
         ("cmv", "mardy"): 0.009,
         ("usdeb", "cmv"): 0.532,
-        ("usdeb", "usdeb"): 0.694,
+        ("usdeb", "usdeb"): [0.585, 0.705, 0.687, 0.729],
         ("usdeb", "micro"): 0.157,
         ("usdeb", "essay"): 0.551,
         ("usdeb", "mardy"): 0.182,
         ("micro", "cmv"): 0.0,
         ("micro", "usdeb"): 0.001,
-        ("micro", "micro"): 0.0,
+        ("micro", "micro"): [0.0, 0.0, 0.0, 0.0],
         ("micro", "essay"): 0.0,
         ("micro", "mardy"): 0.0,
         ("essay", "cmv"): 0.345,
         ("essay", "usdeb"): 0.254,
         ("essay", "micro"): 0.190,
+<<<<<<< HEAD
+        ("essay", "essay"): [0.152, 0.557, 0.382, 0.474],
+        ("essay", "mardy"): 0.0,
+        ("mardy", "cmv"): 0.0,
+        ("mardy", "usdeb"): 0.0, 
+        ("mardy", "micro"): 0.0,
+        ("mardy", "essay"): 0.0,
+        ("mardy", "mardy"): [0.011, 0.326, 0.051, 0.118],
+        ("cmv", "usdeb", "micro", "essay"): [0.01, 0.009, 0.0, 0.01],
+        ("cmv", "usdeb", "micro", "mardy"): [0.208, 0.409, 0.439, 0.384],
+        ("cmv", "usdeb", "essay", "mardy"): [0.0747, 0.022, 0.210, 0.095],
+        ("cmv", "micro", "essay", "mardy"): [0.0, 0.435, 0.139, 0.3],
+        ("usdeb", "micro", "essay", "mardy"): [0.144, 0.52, 0.313, 0.442]
+=======
         ("essay", "essay"): 0.467,
         ("essay", "mardy"): 0.279,
         ("mardy", "cmv"): 0.128,
@@ -107,8 +127,9 @@ if __name__ == "__main__":
         ("cmv", "usdeb", "essay", "mardy"): 0.188,
         ("cmv", "micro", "essay", "mardy"): 0.457,
         ("usdeb", "micro", "essay", "mardy"): 0.455
+>>>>>>> 656fa416a9aa09e00d951dda90c2cdeecbd28f01
         }
 
-    print(regression(corpora_dict, scores_dict))
+    print(regression(corpora_dict, scores_dict).summary())
 
 
