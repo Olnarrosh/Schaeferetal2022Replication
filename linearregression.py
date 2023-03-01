@@ -95,7 +95,7 @@ if __name__ == "__main__":
         ("usdeb", "mardy"): 0.182,
         ("micro", "cmv"): 0.0,
         ("micro", "usdeb"): 0.001,
-        ("micro", "micro"): [0.0, 0.0, 0.0, 0.0],
+        ("micro", "micro"): [0.0, 0.833, 0.444, 0.0],
         ("micro", "essay"): 0.0,
         ("micro", "mardy"): 0.0,
         ("essay", "cmv"): 0.345,
