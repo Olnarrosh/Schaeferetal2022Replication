@@ -101,20 +101,6 @@ if __name__ == "__main__":
         ("essay", "cmv"): 0.345,
         ("essay", "usdeb"): 0.254,
         ("essay", "micro"): 0.190,
-<<<<<<< HEAD
-        ("essay", "essay"): [0.152, 0.557, 0.382, 0.474],
-        ("essay", "mardy"): 0.0,
-        ("mardy", "cmv"): 0.0,
-        ("mardy", "usdeb"): 0.0, 
-        ("mardy", "micro"): 0.0,
-        ("mardy", "essay"): 0.0,
-        ("mardy", "mardy"): [0.011, 0.326, 0.051, 0.118],
-        ("cmv", "usdeb", "micro", "essay"): [0.01, 0.009, 0.0, 0.01],
-        ("cmv", "usdeb", "micro", "mardy"): [0.208, 0.409, 0.439, 0.384],
-        ("cmv", "usdeb", "essay", "mardy"): [0.0747, 0.022, 0.210, 0.095],
-        ("cmv", "micro", "essay", "mardy"): [0.0, 0.435, 0.139, 0.3],
-        ("usdeb", "micro", "essay", "mardy"): [0.144, 0.52, 0.313, 0.442]
-=======
         ("essay", "essay"): 0.467,
         ("essay", "mardy"): 0.279,
         ("mardy", "cmv"): 0.128,
@@ -127,7 +113,6 @@ if __name__ == "__main__":
         ("cmv", "usdeb", "essay", "mardy"): 0.188,
         ("cmv", "micro", "essay", "mardy"): 0.457,
         ("usdeb", "micro", "essay", "mardy"): 0.455
->>>>>>> 656fa416a9aa09e00d951dda90c2cdeecbd28f01
         }
 
     print(regression(corpora_dict, scores_dict).summary())
